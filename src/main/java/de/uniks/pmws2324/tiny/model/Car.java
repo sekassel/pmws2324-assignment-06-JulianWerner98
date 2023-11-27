@@ -1,4 +1,4 @@
-package de.uniks.ws2324.tiny.model;
+package de.uniks.pmws2324.tiny.model;
 import java.util.Objects;
 import java.beans.PropertyChangeSupport;
 

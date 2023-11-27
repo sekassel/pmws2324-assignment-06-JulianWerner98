@@ -1,10 +1,9 @@
-package de.uniks.ws2324.tiny.model;
+package de.uniks.pmws2324.tiny.model;
 
 import org.fulib.builder.ClassModelDecorator;
 import org.fulib.builder.ClassModelManager;
 import org.fulib.builder.reflect.Link;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenModel implements ClassModelDecorator {

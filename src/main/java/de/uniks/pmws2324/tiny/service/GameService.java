@@ -1,12 +1,11 @@
-package de.uniks.ws2324.tiny.service;
+package de.uniks.pmws2324.tiny.service;
 
-import de.uniks.ws2324.tiny.model.*;
+import de.uniks.pmws2324.tiny.Constants;
+import de.uniks.pmws2324.tiny.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static de.uniks.ws2324.tiny.Constants.*;
 
 public class GameService {
     private final List<Street> streets = new ArrayList<>();
@@ -18,32 +17,32 @@ public class GameService {
 
         // HQ Kassel
         this.headQuarter = new HeadQuarter();
-        this.headQuarter.setName(CITY_NAME_KASSEL).setX(CITY_X_KASSEL).setY(CITY_Y_KASSEL);
+        this.headQuarter.setName(Constants.CITY_NAME_KASSEL).setX(Constants.CITY_X_KASSEL).setY(Constants.CITY_Y_KASSEL);
         this.cities.add(this.headQuarter);
 
         // Paderborn
         City paderborn = new City();
-        paderborn.setName(CITY_NAME_PADERBORN).setX(CITY_X_PADERBORN).setY(CITY_Y_PADERBORN);
+        paderborn.setName(Constants.CITY_NAME_PADERBORN).setX(Constants.CITY_X_PADERBORN).setY(Constants.CITY_Y_PADERBORN);
         this.cities.add(paderborn);
 
         // Bad Arolsen
         City badArolsen = new City();
-        badArolsen.setName(CITY_NAME_BAD_AROLSEN).setX(CITY_X_BAD_AROLSEN).setY(CITY_Y_BAD_AROLSEN);
+        badArolsen.setName(Constants.CITY_NAME_BAD_AROLSEN).setX(Constants.CITY_X_BAD_AROLSEN).setY(Constants.CITY_Y_BAD_AROLSEN);
         this.cities.add(badArolsen);
 
         // Marburg
         City marburg = new City();
-        marburg.setName(CITY_NAME_MARBURG).setX(CITY_X_MARBURG).setY(CITY_Y_MARBURG);
+        marburg.setName(Constants.CITY_NAME_MARBURG).setX(Constants.CITY_X_MARBURG).setY(Constants.CITY_Y_MARBURG);
         this.cities.add(marburg);
 
         // Eschwege
         City eschwege = new City();
-        eschwege.setName(CITY_NAME_ESCHWEGE).setX(CITY_X_ESCHWEGE).setY(CITY_Y_ESCHWEGE);
+        eschwege.setName(Constants.CITY_NAME_ESCHWEGE).setX(Constants.CITY_X_ESCHWEGE).setY(Constants.CITY_Y_ESCHWEGE);
         this.cities.add(eschwege);
 
         // Göttingen
         City goettingen = new City();
-        goettingen.setName(CITY_NAME_GOETTINGEN).setX(CITY_X_GOETTINGEN).setY(CITY_Y_GOETTINGEN);
+        goettingen.setName(Constants.CITY_NAME_GOETTINGEN).setX(Constants.CITY_X_GOETTINGEN).setY(Constants.CITY_Y_GOETTINGEN);
         this.cities.add(goettingen);
 
         // connect cities
@@ -66,8 +65,8 @@ public class GameService {
     private void generateOrder() {
         new Order()
                 .setLocation(this.cities.get(rnGenerator.nextInt(this.cities.size())))
-                .setReward(rnGenerator.nextInt(ORDER_REWARD_MIN, ORDER_REWARD_MAX))
-                .setExpires(rnGenerator.nextInt(ORDER_LIFE_MS_MIN, ORDER_LIFE_MS_MAX));
+                .setReward(rnGenerator.nextInt(Constants.ORDER_REWARD_MIN, Constants.ORDER_REWARD_MAX))
+                .setExpires(rnGenerator.nextInt(Constants.ORDER_LIFE_MS_MIN, Constants.ORDER_LIFE_MS_MAX));
     }
 
     public Street connectCities(City c1, City c2) {

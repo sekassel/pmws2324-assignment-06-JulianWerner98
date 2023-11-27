@@ -1,5 +1,4 @@
-package de.uniks.ws2324.tiny.model;
-import java.beans.PropertyChangeSupport;
+package de.uniks.pmws2324.tiny.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;

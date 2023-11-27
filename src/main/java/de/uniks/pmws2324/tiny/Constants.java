@@ -1,4 +1,4 @@
-package de.uniks.ws2324.tiny;
+package de.uniks.pmws2324.tiny;
 
 public class Constants {
 
