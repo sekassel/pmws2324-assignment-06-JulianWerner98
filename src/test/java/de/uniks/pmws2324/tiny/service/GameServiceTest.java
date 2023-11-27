@@ -22,10 +22,6 @@ class GameServiceTest {
     }
     @Test
     void initGameTest() {
-        /*Der Test soll die zugehörige Methode aufrufen und
-        das Ergebnis mit Asserts prüfen. Es genügt, die Verbindungen der Straßen und Städte, die explizit
-        gesetzten Werte des Autos und das Vorhandensein der zwei Orders mit Attributen des
-        gewünschten Wertebereichs zu prüfen.*/
         GameService gameService = new GameService();
         gameService.initGame();
         assertEquals(6, gameService.getCities().size());
