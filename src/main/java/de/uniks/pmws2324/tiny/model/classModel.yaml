@@ -4,8 +4,8 @@
   defaultPropertyStyle: 	Bean
   defaultRoleType: 	"java.util.ArrayList<%s>"
   mainJavaDir: 	"src/main/java"
-  packageName: 	de.uniks.ws2324.tiny.model
-  packageSrcFolder: 	"src/main/java/de/uniks/ws2324/tiny/model"
+  packageName: 	de.uniks.pmws2324.tiny.model
+  packageSrcFolder: 	"src/main/java/de/uniks/pmws2324/tiny/model"
 
 - street: 	org.fulib.classmodel.Clazz
   attributes: 	street_speedLimit 	street_blocked

@@ -13,6 +13,15 @@ public class GameService {
     private HeadQuarter headQuarter;
     private final Random rnGenerator = new Random();
 
+    public List<Street> getStreets() {
+        return streets;
+    }
+
+    public List<City> getCities() {
+        return cities;
+    }
+
+
     public void initGame() {
 
         // HQ Kassel
@@ -55,7 +64,7 @@ public class GameService {
         connectCities(marburg, eschwege);
 
         // generate Car
-        new Car().setDriver("Alice").setPosition(this.headQuarter);
+        new Car().setDriver("Alice").setPosition(this.headQuarter).setOwner(this.headQuarter);
 
         // generate orders
         generateOrder();

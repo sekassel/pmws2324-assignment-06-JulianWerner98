@@ -9,7 +9,7 @@ plugins {
     id 'org.fulib.fulibGradle' version '0.5.0'
 }
 
-group 'de.uniks.ws2324.tiny'
+group 'de.uniks.pmws2324.tiny'
 version '1.0-SNAPSHOT'
 
 repositories {
