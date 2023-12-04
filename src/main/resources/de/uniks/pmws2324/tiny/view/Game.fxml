@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.pmws2324.tiny.controller.GameController">
    <children>
       <AnchorPane prefHeight="671.0" prefWidth="450.0" style="-fx-border-color: black; -fx-border-width: 2;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -178,12 +177,12 @@
                         <Image url="@order-fulfillment.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="224.0" layoutY="28.0" text="Time:" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="224.0" AnchorPane.topAnchor="28.0">
+                  <Label layoutX="215.0" layoutY="29.0" text="Time:" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="215.0" AnchorPane.topAnchor="29.0">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="orderTimeLabel" layoutX="219.0" layoutY="58.0" text="1:30 m" AnchorPane.leftAnchor="219.0" AnchorPane.topAnchor="58.0">
+                  <Label fx:id="orderTimeLabel" layoutX="216.0" layoutY="58.0" text="1:30 m" AnchorPane.leftAnchor="216.0" AnchorPane.topAnchor="58.0">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -215,9 +214,9 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-width: 2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="460.0" AnchorPane.topAnchor="10.0">
+      <AnchorPane fx:id="gameViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-width: 2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="460.0" AnchorPane.topAnchor="10.0">
          <children>
-            <Canvas fx:id="mapCanvas" height="655.0" layoutX="4.0" layoutY="4.0" width="774.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
+            <Canvas fx:id="mapCanvas" height="100.0" layoutX="4.0" layoutY="4.0" width="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
    </children>

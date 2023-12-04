@@ -83,4 +83,12 @@ public class GameService {
         streets.add(street);
         return street;
     }
+
+    public HeadQuarter getHeadquarter() {
+        return headQuarter;
+    }
+
+    public int generateNewCarPrice() {
+        return rnGenerator.nextInt(1000, 5000);
+    }
 }
