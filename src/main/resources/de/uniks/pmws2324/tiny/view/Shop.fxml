@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="145.0" layoutY="34.0" text="Balance:" AnchorPane.topAnchor="42.0">
@@ -16,7 +15,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="balanceLabel" ellipsisString="" layoutX="218.0" layoutY="34.0" text="29.390,00€" AnchorPane.topAnchor="42.0">
+      <Label fx:id="shopBalanceLabel" ellipsisString="" layoutX="218.0" layoutY="34.0" text="29.390,00€" AnchorPane.topAnchor="42.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -31,7 +30,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="carCostLabel" layoutX="310.0" layoutY="177.0" text="25.000€" textAlignment="CENTER">
+      <Label fx:id="ShopCarCostLabel" layoutX="310.0" layoutY="177.0" text="25.000€" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
