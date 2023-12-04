@@ -11,8 +11,8 @@ public class Car
    private String driver;
    private Location position;
    private Order order;
-   private HeadQuarter owner;
    protected PropertyChangeSupport listeners;
+   private HeadQuarter owner;
 
    public String getDriver()
    {
@@ -102,12 +102,12 @@ public class Car
       if (this.owner != null)
       {
          this.owner = null;
-         oldValue.withoutCars(this);
+         oldValue.withoutOwnedCars(this);
       }
       this.owner = value;
       if (value != null)
       {
-         value.withCars(this);
+         value.withOwnedCars(this);
       }
       this.firePropertyChange(PROPERTY_OWNER, oldValue, value);
       return this;

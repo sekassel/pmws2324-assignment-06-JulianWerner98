@@ -9,7 +9,7 @@ import java.util.List;
 public class GenModel implements ClassModelDecorator {
     class Car {
         String driver;
-        @Link("cars")
+        @Link("ownedCars")
         HeadQuarter owner;
         @Link("cars")
         Location position;
@@ -20,7 +20,7 @@ public class GenModel implements ClassModelDecorator {
     class HeadQuarter extends City {
         int money;
         @Link("owner")
-        List<Car> cars;
+        List<Car> ownedCars;
 
     }
 

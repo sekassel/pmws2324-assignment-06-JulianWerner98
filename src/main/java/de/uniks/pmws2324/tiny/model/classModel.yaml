@@ -57,7 +57,7 @@
   modified: 	false
   name: 	HeadQuarter
   propertyStyle: 	Bean
-  roles: 	headQuarter_cars
+  roles: 	headQuarter_ownedCars
   superClass: 	city
 
 - c1: 	org.fulib.classmodel.CollectionType
@@ -234,7 +234,7 @@
   id: 	Car_owner
   modified: 	false
   name: 	owner
-  other: 	headQuarter_cars
+  other: 	headQuarter_ownedCars
   propertyStyle: 	Bean
 
 - headQuarter_money: 	org.fulib.classmodel.Attribute
@@ -246,14 +246,14 @@
   type: 	int
   typeSignature: 	int
 
-- headQuarter_cars: 	org.fulib.classmodel.AssocRole
+- headQuarter_ownedCars: 	org.fulib.classmodel.AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	headQuarter
   collectionType: 	c1
-  id: 	HeadQuarter_cars
+  id: 	HeadQuarter_ownedCars
   modified: 	false
-  name: 	cars
+  name: 	ownedCars
   other: 	car_owner
   propertyStyle: 	Bean
   roleType: 	"java.util.ArrayList<%s>"

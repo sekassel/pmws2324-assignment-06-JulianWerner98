@@ -7,9 +7,9 @@ import java.util.Collection;
 public class HeadQuarter
 extends City {
    public static final String PROPERTY_MONEY = "money";
-   public static final String PROPERTY_CARS = "cars";
+   public static final String PROPERTY_OWNED_CARS = "ownedCars";
    private int money;
-   private List<Car> cars;
+   private List<Car> ownedCars;
 
    public int getMoney()
    {
@@ -29,68 +29,68 @@ extends City {
       return this;
    }
 
-   public List<Car> getCars()
+   public List<Car> getOwnedCars()
    {
-      return this.cars != null ? Collections.unmodifiableList(this.cars) : Collections.emptyList();
+      return this.ownedCars != null ? Collections.unmodifiableList(this.ownedCars) : Collections.emptyList();
    }
 
-   public HeadQuarter withCars(Car value)
+   public HeadQuarter withOwnedCars(Car value)
    {
-      if (this.cars == null)
+      if (this.ownedCars == null)
       {
-         this.cars = new ArrayList<>();
+         this.ownedCars = new ArrayList<>();
       }
-      if (!this.cars.contains(value))
+      if (!this.ownedCars.contains(value))
       {
-         this.cars.add(value);
+         this.ownedCars.add(value);
          value.setOwner(this);
-         this.firePropertyChange(PROPERTY_CARS, null, value);
+         this.firePropertyChange(PROPERTY_OWNED_CARS, null, value);
       }
       return this;
    }
 
-   public HeadQuarter withCars(Car... value)
+   public HeadQuarter withOwnedCars(Car... value)
    {
       for (final Car item : value)
       {
-         this.withCars(item);
+         this.withOwnedCars(item);
       }
       return this;
    }
 
-   public HeadQuarter withCars(Collection<? extends Car> value)
+   public HeadQuarter withOwnedCars(Collection<? extends Car> value)
    {
       for (final Car item : value)
       {
-         this.withCars(item);
+         this.withOwnedCars(item);
       }
       return this;
    }
 
-   public HeadQuarter withoutCars(Car value)
+   public HeadQuarter withoutOwnedCars(Car value)
    {
-      if (this.cars != null && this.cars.remove(value))
+      if (this.ownedCars != null && this.ownedCars.remove(value))
       {
          value.setOwner(null);
-         this.firePropertyChange(PROPERTY_CARS, value, null);
+         this.firePropertyChange(PROPERTY_OWNED_CARS, value, null);
       }
       return this;
    }
 
-   public HeadQuarter withoutCars(Car... value)
+   public HeadQuarter withoutOwnedCars(Car... value)
    {
       for (final Car item : value)
       {
-         this.withoutCars(item);
+         this.withoutOwnedCars(item);
       }
       return this;
    }
 
-   public HeadQuarter withoutCars(Collection<? extends Car> value)
+   public HeadQuarter withoutOwnedCars(Collection<? extends Car> value)
    {
       for (final Car item : value)
       {
-         this.withoutCars(item);
+         this.withoutOwnedCars(item);
       }
       return this;
    }
@@ -99,6 +99,6 @@ extends City {
    public void removeYou()
    {
       super.removeYou();
-      this.withoutCars(new ArrayList<>(this.getCars()));
+      this.withoutOwnedCars(new ArrayList<>(this.getOwnedCars()));
    }
 }
