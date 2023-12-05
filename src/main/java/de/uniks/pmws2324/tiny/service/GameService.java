@@ -68,7 +68,7 @@ public class GameService {
         generateOrder();
     }
 
-    private void generateOrder() {
+    public void generateOrder() {
         new Order()
                 .setLocation(this.cities.get(rnGenerator.nextInt(this.cities.size())))
                 .setReward(rnGenerator.nextInt(Constants.ORDER_REWARD_MIN, Constants.ORDER_REWARD_MAX))
@@ -140,7 +140,6 @@ public class GameService {
         order.getCar().setPosition(headQuarter);
         order.getLocation().withoutOrders(order);
         order.setCar(null);
-        generateOrder();
     }
 
     public void setNewCarPosition(Car car, Location location) {

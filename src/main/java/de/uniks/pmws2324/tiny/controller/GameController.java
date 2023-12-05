@@ -4,6 +4,7 @@ import de.uniks.pmws2324.tiny.App;
 import de.uniks.pmws2324.tiny.model.*;
 import de.uniks.pmws2324.tiny.service.GameService;
 import de.uniks.pmws2324.tiny.Main;
+import de.uniks.pmws2324.tiny.service.TimerService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -26,6 +27,7 @@ import static de.uniks.pmws2324.tiny.Constants.FIELD_DIM;
 
 public class GameController extends Controller {
     private static final int TRAVEL_TIME = 1;
+    private final TimerService timerService;
     private HeadQuarter headQuarter;
     private Parent parent;
     private Order selectedOrder;
@@ -52,6 +54,7 @@ public class GameController extends Controller {
         super(app, gameService);
         gameService.initGame();
         this.headQuarter = gameService.getHeadQuarter();
+        timerService = new TimerService(gameService);
     }
 
     @Override
@@ -126,9 +129,9 @@ public class GameController extends Controller {
         // Draw Streets
         City cityOne;
         City cityTwo;
-        context.setStroke(Color.BLACK);
-        context.setLineWidth(5);
         for (Street street : this.gameService.getStreets()) {
+            context.setStroke(Color.BLACK);
+            context.setLineWidth(5);
             cityOne = street.getConnects().get(0);
             cityTwo = street.getConnects().get(1);
             context.strokeLine(
@@ -144,6 +147,13 @@ public class GameController extends Controller {
                     ((cityOne.getX() + cityTwo.getX()) / 2) + (FIELD_DIM / 2 - 10),
                     (cityOne.getY() + cityTwo.getY()) / 2
             );
+            if (street.isBlocked()) {
+                int x = (street.getConnects().get(0).getX() + FIELD_DIM / 2) + ((street.getConnects().get(1).getX() - street.getConnects().get(0).getX()) / 2);
+                int y = (street.getConnects().get(0).getY() + FIELD_DIM / 2) + ((street.getConnects().get(1).getY() - street.getConnects().get(0).getY()) / 2);
+                context.setStroke(Color.RED);
+                context.strokeLine(x - 5, y - 5, x + 5, y + 5);
+                context.strokeLine(x + 5, y - 5, x - 5, y + 5);
+            }
         }
 
         // Draw HQ with red border
