@@ -142,4 +142,8 @@ public class GameService {
         order.setCar(null);
         generateOrder();
     }
+
+    public void setNewCarPosition(Car car, Location location) {
+        car.setPosition(location);
+    }
 }

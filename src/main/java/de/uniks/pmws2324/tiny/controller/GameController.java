@@ -107,7 +107,6 @@ public class GameController extends Controller {
     }
 
     private void displayCar(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("displayCar");
         // Todo: Change to list later
         if (this.headQuarter.getCars().size() > 0) {
             Car car = this.headQuarter.getCars().get(0);
@@ -196,7 +195,8 @@ public class GameController extends Controller {
         }
     }
 
-    private void setOrder() {
+    private void setOrder(Order selectedOrder) {
+        this.selectedOrder = selectedOrder;
         if (selectedOrder != null) {
             this.orderAcceptButton.setDisable(this.gameService.getHeadquarter().getCars().size() == 0);
             this.orderRewardLabel.setText(selectedOrder.getReward() + " €");
@@ -232,14 +232,13 @@ public class GameController extends Controller {
     private void nextStep(List<Location> locations, Car car) {
         if (locations.size() > 0) {
             Location nextLocation = locations.get(0);
-            car.setPosition(nextLocation);
+            gameService.setNewCarPosition(car, nextLocation);
             locations.remove(0);
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(TRAVEL_TIME), event -> nextStep(locations, car)));
             timeline.play();
         } else {
             this.gameService.getRewardForOrder(car.getOrder());
-            selectedOrder = null;
-            setOrder();
+            setOrder(null);
         }
     }
 
@@ -247,11 +246,10 @@ public class GameController extends Controller {
         City selectedCity = gameService.getCities().stream()
                 .filter(city -> city.getX() < mouseX && city.getX() + FIELD_DIM > mouseX && city.getY() < mouseY && city.getY() + FIELD_DIM > mouseY).findFirst().orElse(null);
         if (selectedCity != null && selectedCity.getOrders().size() > 0) {
-            selectedOrder = selectedCity.getOrders().get(0);
-            setOrder();
+            setOrder(selectedCity.getOrders().get(0));
             orderAcceptButton.setDisable(this.gameService.getHeadquarter().getCars().size() == 0);
         } else {
-            selectedOrder = null;
+            setOrder(null);
             orderAcceptButton.setDisable(true);
         }
     }
