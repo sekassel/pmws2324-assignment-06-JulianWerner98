@@ -14,11 +14,15 @@ public class Controller {
         final FXMLLoader guiLoader = new FXMLLoader(Main.class.getResource("view/Game.fxml"));
         Parent parent = guiLoader.load();
 
-        GameController controller = guiLoader.getController();
-        controller.render();
+
 
         stage.setTitle("Tiny Transport");
         stage.setScene(new Scene(parent));
+        stage.setMinHeight(650);
+        stage.setMinWidth(1200);
         stage.show();
+
+        GameController controller = guiLoader.getController();
+        controller.render();
     }
 }

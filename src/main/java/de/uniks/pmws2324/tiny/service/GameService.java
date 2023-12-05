@@ -27,7 +27,6 @@ public class GameService {
         // HQ Kassel
         this.headQuarter = new HeadQuarter();
         this.headQuarter.setName(Constants.CITY_NAME_KASSEL).setX(Constants.CITY_X_KASSEL).setY(Constants.CITY_Y_KASSEL);
-        this.cities.add(this.headQuarter);
 
         // Paderborn
         City paderborn = new City();

@@ -51,7 +51,6 @@ public class GameController {
         gameService.initGame();
         // Canvas
         this.context = mapCanvas.getGraphicsContext2D();
-
         mapCanvas.widthProperty().bind(gameViewPane.widthProperty());
         mapCanvas.heightProperty().bind(gameViewPane.widthProperty());
         mapCanvas.setOnMouseMoved(event -> handleMouseHover(event.getX(), event.getY()));
@@ -63,15 +62,9 @@ public class GameController {
     }
 
     private void drawMap() {
-        //  Städte sollen als gelbe Quadrate angezeigt werden. An geeigneter Stelle soll zusätzlich der Name der Stadt angezeigt werden. Der HeadQuarter soll besonders hervorgehoben werden.
-        //  Straßen sollen als schwarze Linien angezeigt werden. An geeigneter Stelle soll zusätzlich die Länge der Straße angezeigt werden.
-        // Autos sollen als rote Kreise an ihrer aktuellen Location eingezeichnet werden.
-        // Orders sollen als kleine blaue Kreise an geeigneter Stelle an ihrer jeweiligen Stadt eingezeichnet werden.
-
         // Clean
         final double sw = mapCanvas.getWidth();
         final double sh = mapCanvas.getHeight();
-
 
         // Clean canvas
         context.setFill(Color.WHITE);
@@ -80,7 +73,7 @@ public class GameController {
         // Draw Streets
         City cityOne;
         City cityTwo;
-        context.setStroke(Color.GREY);
+        context.setStroke(Color.BLACK);
         context.setLineWidth(5);
         for (Street street : this.gameService.getStreets()) {
             cityOne = street.getConnects().get(0);
@@ -91,14 +84,43 @@ public class GameController {
                     cityTwo.getX() + FIELD_DIM / 2,
                     cityTwo.getY() + FIELD_DIM / 2
             );
+            int length = (int) Math.sqrt(Math.pow(cityOne.getX() - cityTwo.getX(), 2) + Math.pow(cityOne.getY() - cityTwo.getY(), 2));
+            context.setFill(Color.GREY);
+            context.fillText(
+                    Integer.toString(length),
+                    ((cityOne.getX() + cityTwo.getX()) / 2) + (FIELD_DIM / 2 - 10),
+                    (cityOne.getY() + cityTwo.getY()) / 2
+            );
         }
 
         // Draw Cities
-        context.setFill(Color.YELLOW);
         for (City city : this.gameService.getCities()) {
+            context.setFill(Color.YELLOW);
             context.fillRect(city.getX(), city.getY(), FIELD_DIM, FIELD_DIM);
             context.setFill(Color.BLACK);
             context.fillText(city.getName(), city.getX(), city.getY());
+        }
+        // Draw HQ with red border
+        context.setStroke(Color.RED);
+        context.setLineWidth(5);
+        context.setFill(Color.YELLOW);
+        context.fillRect(this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY(), FIELD_DIM, FIELD_DIM);
+        context.strokeRect(this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY(), FIELD_DIM, FIELD_DIM);
+        context.setFill(Color.BLACK);
+        context.fillText(this.gameService.getHeadquarter().getName(), this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY() - 5);
+
+        // Draw Cars
+        for (Car car : this.gameService.getHeadquarter().getCars()) {
+            context.setFill(Color.RED);
+            context.fillOval(car.getPosition().getX(), car.getPosition().getY(), FIELD_DIM / 2, FIELD_DIM / 2);
+        }
+
+        // Draw Orders
+        for (City city : this.gameService.getCities()) {
+            if (city.getOrders().size() > 0) {
+                context.setFill(Color.BLUE);
+                context.fillOval(city.getX() + FIELD_DIM / 2, city.getY() + FIELD_DIM / 2, FIELD_DIM / 2, FIELD_DIM / 2);
+            }
         }
     }
 
@@ -106,8 +128,8 @@ public class GameController {
         //Fire PCL to set initial values
         this.gameService.getHeadquarter().firePropertyChange(HeadQuarter.PROPERTY_MONEY, null, this.gameService.getHeadquarter().getMoney());
         this.gameService.getHeadquarter().firePropertyChange(HeadQuarter.PROPERTY_NAME, null, this.gameService.getHeadquarter().getName());
-        currentOrder.firePropertyChange(HeadQuarter.PROPERTY_ORDERS, null, this.gameService.getHeadquarter().getOrders());
         this.gameService.getHeadquarter().firePropertyChange(HeadQuarter.PROPERTY_CARS, null, this.gameService.getHeadquarter().getCars());
+        setOrder();
 
         this.carCostLabel.setText(this.gameService.generateNewCarPrice() + " €");
         //Todo remove if shop exists
@@ -117,7 +139,6 @@ public class GameController {
     private void addPropertyChangeListener() {
         this.gameService.getHeadquarter().listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_MONEY, this::setBalance);
         this.gameService.getHeadquarter().listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_NAME, this::setHqName);
-        currentOrder.listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_ORDERS, this::setOrder);
         this.gameService.getHeadquarter().listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_CARS, this::setCar);
     }
 
@@ -137,7 +158,7 @@ public class GameController {
         }
     }
 
-    private void setOrder(PropertyChangeEvent propertyChangeEvent) {
+    private void setOrder() {
         if (currentOrder.getReward() == 0) {
             this.orderAcceptButton.setDisable(true);
             this.orderRewardLabel.setText("");
@@ -165,6 +186,15 @@ public class GameController {
     }
 
     private void handleMouseClick(double mouseX, double mouseY) {
-        //System.out.println("Mouse Click: " + mouseX + " " + mouseY);
+        if (this.gameService.getHeadquarter().getCars().size() == 0) {
+            return;
+        }
+        City selectedCity = gameService.getCities().stream()
+                .filter(city -> city.getX() < mouseX && city.getX() + FIELD_DIM > mouseX && city.getY() < mouseY && city.getY() + FIELD_DIM > mouseY).findFirst().orElse(null);
+        if (selectedCity != null && selectedCity.getOrders().size() > 0) {
+            currentOrder = selectedCity.getOrders().get(0);
+            //Todo kein PCL
+            setOrder();
+        }
     }
 }

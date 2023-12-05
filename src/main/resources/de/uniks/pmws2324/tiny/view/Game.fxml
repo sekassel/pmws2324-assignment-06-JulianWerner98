@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.pmws2324.tiny.controller.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="681.0" minWidth="1260.0" prefHeight="681.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.pmws2324.tiny.controller.GameController">
    <children>
       <AnchorPane prefHeight="671.0" prefWidth="450.0" style="-fx-border-color: black; -fx-border-width: 2;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -214,7 +214,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="gameViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-width: 2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="460.0" AnchorPane.topAnchor="10.0">
+      <AnchorPane fx:id="gameViewPane" minHeight="500.0" minWidth="600.0" style="-fx-border-color: black; -fx-border-width: 2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="460.0" AnchorPane.topAnchor="10.0">
          <children>
             <Canvas fx:id="mapCanvas" height="100.0" layoutX="4.0" layoutY="4.0" width="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>

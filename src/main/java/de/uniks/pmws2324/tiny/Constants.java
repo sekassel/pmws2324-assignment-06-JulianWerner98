@@ -29,6 +29,6 @@ public class Constants {
     public static final int ORDER_LIFE_MS_MAX = 60000;
 
     // map constants
-    public static final double FIELD_DIM = 75;
+    public static final double FIELD_DIM = 50;
 
 }
