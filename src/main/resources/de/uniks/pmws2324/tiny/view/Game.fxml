@@ -167,7 +167,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="100.0" prefWidth="430.0" style="-fx-border-color: black; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <children>
-                  <Label fx:id="orderTownLabel" layoutX="101.0" layoutY="37.0" text="Eschwege" AnchorPane.leftAnchor="101.0" AnchorPane.topAnchor="37.0">
+                  <Label fx:id="orderTownLabel" layoutX="82.0" layoutY="36.0" text="Eschwege" AnchorPane.leftAnchor="82.0" AnchorPane.topAnchor="36.0">
                      <font>
                         <Font size="24.0" />
                      </font>
