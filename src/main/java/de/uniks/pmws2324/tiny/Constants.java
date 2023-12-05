@@ -29,5 +29,5 @@ public class Constants {
     public static final int ORDER_EXPIRES_MS_MAX = 60000;
 
     // entity constants
-    public static final int FIELD_DIM = 75;
+    public static final int FIELD_DIM = 50;
 }

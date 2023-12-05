@@ -107,6 +107,7 @@ public class GameController extends Controller {
     }
 
     private void displayCar(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("displayCar");
         // Todo: Change to list later
         if (this.headQuarter.getCars().size() > 0) {
             Car car = this.headQuarter.getCars().get(0);
@@ -123,22 +124,6 @@ public class GameController extends Controller {
         cleanCanvas();
         GraphicsContext context = mapCanvas.getGraphicsContext2D();
 
-// Draw HQ with red border
-        context.setStroke(Color.RED);
-        context.setLineWidth(5);
-        context.setFill(Color.YELLOW);
-        context.fillRect(this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY(), FIELD_DIM, FIELD_DIM);
-        context.strokeRect(this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY(), FIELD_DIM, FIELD_DIM);
-        context.setFill(Color.BLACK);
-        context.fillText(this.gameService.getHeadquarter().getName(), this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY() - 5);
-
-        // Draw Cities
-        for (City city : this.gameService.getCities()) {
-            context.setFill(Color.YELLOW);
-            context.fillRect(city.getX(), city.getY(), FIELD_DIM, FIELD_DIM);
-            context.setFill(Color.BLACK);
-            context.fillText(city.getName(), city.getX(), city.getY());
-        }
         // Draw Streets
         City cityOne;
         City cityTwo;
@@ -162,6 +147,22 @@ public class GameController extends Controller {
             );
         }
 
+        // Draw HQ with red border
+        context.setStroke(Color.RED);
+        context.setLineWidth(5);
+        context.setFill(Color.YELLOW);
+        context.fillRect(this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY(), FIELD_DIM, FIELD_DIM);
+        context.strokeRect(this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY(), FIELD_DIM, FIELD_DIM);
+        context.setFill(Color.BLACK);
+        context.fillText(this.gameService.getHeadquarter().getName(), this.gameService.getHeadquarter().getX(), this.gameService.getHeadquarter().getY() - 5);
+
+        // Draw Cities
+        for (City city : this.gameService.getCities()) {
+            context.setFill(Color.YELLOW);
+            context.fillRect(city.getX(), city.getY(), FIELD_DIM, FIELD_DIM);
+            context.setFill(Color.BLACK);
+            context.fillText(city.getName(), city.getX(), city.getY());
+        }
 
 
         // Draw Cars
@@ -175,13 +176,13 @@ public class GameController extends Controller {
             for (Car car : location.getCars()) {
                 x = car.getPosition().getX() + 10;
                 y = car.getPosition().getY() + 10;
-                if(location instanceof Street) {
+                if (location instanceof Street) {
                     Street street = (Street) location;
-                    x = street.getConnects().get(0).getX() + ((street.getConnects().get(1).getX() - street.getConnects().get(0).getX()) / 2);
-                    y = street.getConnects().get(0).getY() + ((street.getConnects().get(1).getY() - street.getConnects().get(0).getY()) / 2);
+                    x = (street.getConnects().get(0).getX() + FIELD_DIM / 2) + ((street.getConnects().get(1).getX() - street.getConnects().get(0).getX()) / 2);
+                    y = (street.getConnects().get(0).getY() + FIELD_DIM / 2) + ((street.getConnects().get(1).getY() - street.getConnects().get(0).getY()) / 2);
                 }
                 context.setFill(Color.RED);
-                context.fillOval(x,y, FIELD_DIM / 4, FIELD_DIM / 4);
+                context.fillOval(x, y, FIELD_DIM / 4, FIELD_DIM / 4);
             }
         }
 
@@ -197,10 +198,15 @@ public class GameController extends Controller {
 
     private void setOrder() {
         if (selectedOrder != null) {
-            this.orderAcceptButton.setDisable(false);
+            this.orderAcceptButton.setDisable(this.gameService.getHeadquarter().getCars().size() == 0);
             this.orderRewardLabel.setText(selectedOrder.getReward() + " €");
             this.orderTimeLabel.setText(((int) (selectedOrder.getExpires() / 1000 / 60)) + ":" + ((int) ((selectedOrder.getExpires() / 1000) % 60)));
             this.orderTownLabel.setText(selectedOrder.getLocation().getName());
+        } else {
+            this.orderAcceptButton.setDisable(true);
+            this.orderRewardLabel.setText("");
+            this.orderTimeLabel.setText("");
+            this.orderTownLabel.setText("");
         }
     }
 
@@ -219,7 +225,6 @@ public class GameController extends Controller {
         City end = selectedOrder.getLocation();
         ArrayList<Location> path = gameService.getPath(this.gameService.getHeadquarter(), end);
         if (path != null) {
-            System.out.println(path);
             nextStep(path, selectedOrder.getCar());
         }
     }
@@ -227,7 +232,6 @@ public class GameController extends Controller {
     private void nextStep(List<Location> locations, Car car) {
         if (locations.size() > 0) {
             Location nextLocation = locations.get(0);
-            System.out.println(nextLocation);
             car.setPosition(nextLocation);
             locations.remove(0);
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(TRAVEL_TIME), event -> nextStep(locations, car)));

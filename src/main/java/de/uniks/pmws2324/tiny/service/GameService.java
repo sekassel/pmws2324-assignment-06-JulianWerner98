@@ -133,7 +133,8 @@ public class GameService {
 
     public void getRewardForOrder(Order order) {
         this.headQuarter.setMoney(this.headQuarter.getMoney() + order.getReward());
-        order.getLocation().withoutOrders(order);
         order.getCar().setPosition(headQuarter);
+        order.getLocation().withoutOrders(order);
+        order.setCar(null);
     }
 }
