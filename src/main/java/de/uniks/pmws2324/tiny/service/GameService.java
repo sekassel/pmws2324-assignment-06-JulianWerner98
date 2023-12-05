@@ -3,10 +3,7 @@ package de.uniks.pmws2324.tiny.service;
 import de.uniks.pmws2324.tiny.Constants;
 import de.uniks.pmws2324.tiny.model.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GameService {
     private final List<Street> streets = new ArrayList<>();
@@ -93,48 +90,56 @@ public class GameService {
     }
 
     public ArrayList<Location> getPath(City start, City goal) {
-        if(cities.size() == 0 || streets.size() == 0 ) return null;
-        ArrayList<Location> path = new ArrayList<>();
-        HashSet<City> visitedCities = new HashSet<>();
+        if (cities.isEmpty() || streets.isEmpty()) return null;
 
-        if (findPathDFS(start, goal, path, visitedCities)) {
-            return path;
-        } else {
-            return null; // No Path
-        }
-    }
+        Map<Location, Location> previous = new HashMap<>();
+        Set<City> visited = new HashSet<>();
+        Queue<Location> queue = new LinkedList<>();
 
-    private boolean findPathDFS(City current, City goal, ArrayList<Location> path, HashSet<City> visitedCities) {
-        if (current.equals(goal)) {
-            path.add(current);
-            return true;
-        }
+        queue.add(start);
+        visited.add(start);
 
-        visitedCities.add(current);
+        while (!queue.isEmpty()) {
+            Location current = queue.poll();
 
-        for (Street street : streets) {
-            if (street.isBlocked()) continue;
+            if (current.equals(goal)) {
+                return buildPath(start, goal, previous);
+            }
 
-            List<City> connectedCities = street.getConnects();
-            if (connectedCities.contains(current)) {
-                for (City nextCity : connectedCities) {
-                    if (!visitedCities.contains(nextCity)) {
-                        if (findPathDFS(nextCity, goal, path, visitedCities)) {
-                            path.add(0, street); // Straße zum Pfad hinzufügen
-                            path.add(0, current); // Aktuelle Stadt zum Pfad hinzufügen
-                            return true;
+            if (current instanceof City) {
+                City currentCity = (City) current;
+                for (Street street : streets) {
+                    if (street.isBlocked() || !street.getConnects().contains(currentCity)) continue;
+
+                    for (City nextCity : street.getConnects()) {
+                        if (!visited.contains(nextCity)) {
+                            visited.add(nextCity);
+                            previous.put(nextCity, street); // Speichert die Straße, die zur Stadt führt
+                            previous.put(street, currentCity); // Speichert die Stadt, von der aus die Straße kommt
+                            queue.add(nextCity);
                         }
                     }
                 }
             }
         }
-        return false;
+
+        return null; // Kein Pfad gefunden
     }
+
+    private ArrayList<Location> buildPath(Location start, Location goal, Map<Location, Location> previous) {
+        LinkedList<Location> path = new LinkedList<>();
+        for (Location at = goal; at != null; at = previous.get(at)) {
+            path.addFirst(at);
+        }
+        return new ArrayList<>(path);
+    }
+
 
     public void getRewardForOrder(Order order) {
         this.headQuarter.setMoney(this.headQuarter.getMoney() + order.getReward());
         order.getCar().setPosition(headQuarter);
         order.getLocation().withoutOrders(order);
         order.setCar(null);
+        generateOrder();
     }
 }
