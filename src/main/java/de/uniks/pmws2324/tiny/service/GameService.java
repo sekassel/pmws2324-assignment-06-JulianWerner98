@@ -90,4 +90,8 @@ public class GameService {
     public int generateNewCarPrice() {
         return rnGenerator.nextInt(1000, 5000);
     }
+
+    public HeadQuarter getHeadQuarter() {
+        return headQuarter;
+    }
 }

@@ -1,28 +1,36 @@
 package de.uniks.pmws2324.tiny.controller;
 
-import de.uniks.pmws2324.tiny.Main;
+import de.uniks.pmws2324.tiny.App;
 import de.uniks.pmws2324.tiny.service.GameService;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
-import java.io.IOException;
+public abstract class Controller {
 
-public class Controller {
-    public void init(Stage stage) throws IOException {
-        final FXMLLoader guiLoader = new FXMLLoader(Main.class.getResource("view/Game.fxml"));
-        Parent parent = guiLoader.load();
+    public App app;
+    public GameService gameService;
 
-
-
-        stage.setTitle("Tiny Transport");
-        stage.setScene(new Scene(parent));
-        stage.setMinHeight(650);
-        stage.setMinWidth(1200);
-        stage.show();
-
-        GameController controller = guiLoader.getController();
-        controller.render();
+    public Controller(App app, GameService gameService) {
+        this.app = app;
+        this.gameService = gameService;
     }
+
+    /**
+     * Method for loading the fxml-file and initializing any other important component
+     */
+    public abstract void init();
+
+    /**
+     * Method for retrieving view elements and binding values and actions to them
+     *
+     * @return root view element of the loaded view(element)
+     */
+    public abstract Parent render();
+
+    /**
+     * Method to unregister and destroy connections
+     */
+    public void destroy() {
+        this.app = null;
+        this.gameService = null;
+    };
 }
