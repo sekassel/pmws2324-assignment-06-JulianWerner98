@@ -216,7 +216,7 @@
       </AnchorPane>
       <AnchorPane fx:id="gameViewPane" minHeight="500.0" minWidth="600.0" style="-fx-border-color: black; -fx-border-width: 2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="460.0" AnchorPane.topAnchor="10.0">
          <children>
-            <Canvas fx:id="mapCanvas" height="100.0" layoutX="4.0" layoutY="4.0" width="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Canvas fx:id="mapCanvas" height="655.0" layoutX="4.0" layoutY="4.0" width="773.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="2.0" />
          </children>
       </AnchorPane>
    </children>

@@ -4,6 +4,7 @@ import de.uniks.pmws2324.tiny.Constants;
 import de.uniks.pmws2324.tiny.model.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -74,7 +75,7 @@ public class GameService {
         new Order()
                 .setLocation(this.cities.get(rnGenerator.nextInt(this.cities.size())))
                 .setReward(rnGenerator.nextInt(Constants.ORDER_REWARD_MIN, Constants.ORDER_REWARD_MAX))
-                .setExpires(rnGenerator.nextInt(Constants.ORDER_LIFE_MS_MIN, Constants.ORDER_LIFE_MS_MAX));
+                .setExpires(rnGenerator.nextInt(Constants.ORDER_EXPIRES_MS_MIN, Constants.ORDER_EXPIRES_MS_MAX));
     }
 
     public Street connectCities(City c1, City c2) {
@@ -87,11 +88,52 @@ public class GameService {
         return headQuarter;
     }
 
-    public int generateNewCarPrice() {
-        return rnGenerator.nextInt(1000, 5000);
-    }
-
     public HeadQuarter getHeadQuarter() {
         return headQuarter;
+    }
+
+    public ArrayList<Location> getPath(City start, City goal) {
+        if(cities.size() == 0 || streets.size() == 0 ) return null;
+        ArrayList<Location> path = new ArrayList<>();
+        HashSet<City> visitedCities = new HashSet<>();
+
+        if (findPathDFS(start, goal, path, visitedCities)) {
+            return path;
+        } else {
+            return null; // No Path
+        }
+    }
+
+    private boolean findPathDFS(City current, City goal, ArrayList<Location> path, HashSet<City> visitedCities) {
+        if (current.equals(goal)) {
+            path.add(current);
+            return true;
+        }
+
+        visitedCities.add(current);
+
+        for (Street street : streets) {
+            if (street.isBlocked()) continue;
+
+            List<City> connectedCities = street.getConnects();
+            if (connectedCities.contains(current)) {
+                for (City nextCity : connectedCities) {
+                    if (!visitedCities.contains(nextCity)) {
+                        if (findPathDFS(nextCity, goal, path, visitedCities)) {
+                            path.add(0, street); // Straße zum Pfad hinzufügen
+                            path.add(0, current); // Aktuelle Stadt zum Pfad hinzufügen
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void getRewardForOrder(Order order) {
+        this.headQuarter.setMoney(this.headQuarter.getMoney() + order.getReward());
+        order.getLocation().withoutOrders(order);
+        order.getCar().setPosition(headQuarter);
     }
 }

@@ -51,7 +51,7 @@ class GameServiceTest {
         assertEquals(2, orders.size());
         for (Order order: orders) {
             assertTrue(order.getReward() >= ORDER_REWARD_MIN && order.getReward() <= ORDER_REWARD_MAX);
-            assertTrue(order.getExpires() >= ORDER_LIFE_MS_MIN && order.getExpires() <= ORDER_LIFE_MS_MAX);
+            assertTrue(order.getExpires() >= ORDER_EXPIRES_MS_MIN && order.getExpires() <= ORDER_EXPIRES_MS_MAX);
         }
     }
 
