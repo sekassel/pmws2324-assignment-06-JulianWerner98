@@ -53,8 +53,8 @@ public class GameController {
         this.context = mapCanvas.getGraphicsContext2D();
         mapCanvas.widthProperty().bind(gameViewPane.widthProperty());
         mapCanvas.heightProperty().bind(gameViewPane.widthProperty());
-        mapCanvas.setOnMouseMoved(event -> handleMouseHover(event.getX(), event.getY()));
         mapCanvas.setOnMouseClicked(event -> handleMouseClick(event.getX(), event.getY()));
+        orderAcceptButton.setOnMouseClicked(eveent -> handleOrderAccept());
 
         addPropertyChangeListener();
         setInitialValues();
@@ -180,11 +180,6 @@ public class GameController {
         this.balanceLabel.setText(this.gameService.getHeadquarter().getMoney() + " €");
     }
 
-
-    private void handleMouseHover(double mouseX, double mouseY) {
-        //System.out.println("Mouse Hover: " + mouseX + " " + mouseY);
-    }
-
     private void handleMouseClick(double mouseX, double mouseY) {
         if (this.gameService.getHeadquarter().getCars().size() == 0) {
             return;
@@ -196,5 +191,8 @@ public class GameController {
             //Todo kein PCL
             setOrder();
         }
+    }
+
+    private void handleOrderAccept() {
     }
 }
