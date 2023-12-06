@@ -55,8 +55,7 @@ public class ShopController {
             if (newValue.length() > 0
                             && newValue.length() < 20
                             && newValue.matches("[a-zA-Z0-9]+")
-                    //todo uncomment
-                            //&& gameService.getHeadquarter().getMoney() >= gameService.getHeadquarter().getNewCarPrice()
+                            && gameService.getHeadquarter().getMoney() >= gameService.getHeadquarter().getNewCarPrice()
             ) {
                 this.buyButton.setDisable(false);
             } else {

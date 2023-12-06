@@ -156,14 +156,13 @@ public class GameService {
     }
 
     public void buyCar(String driver) {
-        //todo uncomment
-        // if(this.headQuarter.getMoney() >=  this.headQuarter.getNewCarPrice()) {
-        Car car = new Car().setDriver(driver);
-        cars.add(car);
-        car.setOwner(headQuarter).setPosition(headQuarter);
-        this.headQuarter.setMoney(this.headQuarter.getMoney() - this.headQuarter.getNewCarPrice());
-        this.headQuarter.setNewCarPrice(rnGenerator.nextInt(2000, 7500));
-        //}
+        if (this.headQuarter.getMoney() >= this.headQuarter.getNewCarPrice()) {
+            Car car = new Car().setDriver(driver);
+            cars.add(car);
+            car.setOwner(headQuarter).setPosition(headQuarter);
+            this.headQuarter.setMoney(this.headQuarter.getMoney() - this.headQuarter.getNewCarPrice());
+            this.headQuarter.setNewCarPrice(rnGenerator.nextInt(2000, 7500));
+        }
     }
 
     public List<Location> getLocations() {
