@@ -8,6 +8,7 @@ import java.util.*;
 public class GameService {
     private final List<Street> streets = new ArrayList<>();
     private final List<City> cities = new ArrayList<>();
+    private final List<Car> cars = new ArrayList<>();
     private HeadQuarter headQuarter;
     private final Random rnGenerator = new Random();
 
@@ -17,6 +18,11 @@ public class GameService {
 
     public List<City> getCities() {
         return cities;
+    }
+
+    public List<Car> getCars() {
+        cars.sort(Comparator.comparing(Car::getDriver));
+        return cars;
     }
 
 
@@ -61,14 +67,14 @@ public class GameService {
         connectCities(marburg, eschwege);
 
         // generate Car
-        new Car().setDriver("Alice").setPosition(this.headQuarter).setOwner(this.headQuarter);
+        cars.add(new Car().setDriver("Alice").setPosition(this.headQuarter).setOwner(this.headQuarter));
 
         // generate orders
         generateOrder();
         generateOrder();
 
         //Set init Car Price
-       this.headQuarter.setNewCarPrice(4242);
+        this.headQuarter.setNewCarPrice(4242);
     }
 
     public void generateOrder() {
@@ -150,11 +156,22 @@ public class GameService {
     }
 
     public void buyCar(String driver) {
-        if(this.headQuarter.getMoney() >=  this.headQuarter.getNewCarPrice()) {
-            new Car().setOwner(headQuarter).setDriver(driver);
-            this.headQuarter.setMoney(this.headQuarter.getMoney() - this.headQuarter.getNewCarPrice());
-            this.headQuarter.setNewCarPrice(rnGenerator.nextInt(2000,7500));
-        }
+        //todo uncomment
+        // if(this.headQuarter.getMoney() >=  this.headQuarter.getNewCarPrice()) {
+        Car car = new Car().setDriver(driver);
+        cars.add(car);
+        car.setOwner(headQuarter).setPosition(headQuarter);
+        this.headQuarter.setMoney(this.headQuarter.getMoney() - this.headQuarter.getNewCarPrice());
+        this.headQuarter.setNewCarPrice(rnGenerator.nextInt(2000, 7500));
+        //}
+    }
+
+    public List<Location> getLocations() {
+        List<Location> locations = new ArrayList<>();
+        locations.addAll(this.cities);
+        locations.add(this.headQuarter);
+        locations.addAll(this.streets);
+        return locations;
     }
 
 }

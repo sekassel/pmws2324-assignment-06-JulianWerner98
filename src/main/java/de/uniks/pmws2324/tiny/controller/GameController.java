@@ -16,6 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -57,6 +58,8 @@ public class GameController extends Controller {
     Button shopButton;
     @FXML
     Label carCostLabel;
+    @FXML
+    VBox carBox;
 
     public GameController(App app, GameService gameService) {
         super(app, gameService);
@@ -86,10 +89,6 @@ public class GameController extends Controller {
         orderTownLabel.setText("");
         carCostLabel.setText(headQuarter.getNewCarPrice() + "€");
 
-        // Display the first car (will be changed later to display all cars)
-        displayCar(null);
-        this.gameService.getHeadquarter().getCars().get(0).listeners().addPropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
-
         // Set view listener
         orderAcceptButton.setOnAction(this::handleAcceptOrder);
         shopController = new ShopController(gameService, rootPane);
@@ -115,6 +114,8 @@ public class GameController extends Controller {
             car.listeners().addPropertyChangeListener(Car.PROPERTY_POSITION, evt -> drawMap());
             car.listeners().addPropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
         }
+        this.gameService.getHeadquarter().listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_CARS, this::displayCar);
+        displayCar(null);
 
         mapCanvas.setOnMouseClicked(event -> handleMouseClick(event.getX(), event.getY()));
         // draw on canvas
@@ -124,15 +125,12 @@ public class GameController extends Controller {
     }
 
     private void displayCar(PropertyChangeEvent propertyChangeEvent) {
-        // Todo: Change to list later
-        if (this.headQuarter.getCars().size() > 0) {
-            Car car = this.headQuarter.getCars().get(0);
-            this.carDriverLabel.setText(car.getDriver());
-            if (car.getOrder() != null) {
-                this.carDestinationLabel.setText(car.getOrder().getLocation().getName());
-            } else {
-                this.carDestinationLabel.setText("");
-            }
+        System.out.println("displayCar");
+        this.carBox.getChildren().clear();
+        for (Car car : this.gameService.getCars()) {
+            CarSubController carSubController = new CarSubController();
+            carSubController.load(car);
+            carSubController.showInto(carBox);
         }
     }
 
@@ -189,13 +187,9 @@ public class GameController extends Controller {
 
 
         // Draw Cars
-        List<Location> locationList = new ArrayList<>();
-        locationList.addAll(this.gameService.getCities());
-        locationList.addAll(this.gameService.getStreets());
-        locationList.add(this.gameService.getHeadquarter());
         int x;
         int y;
-        for (Location location : locationList) {
+        for (Location location : gameService.getLocations()) {
             for (Car car : location.getCars()) {
                 x = car.getPosition().getX() + 10;
                 y = car.getPosition().getY() + 10;
