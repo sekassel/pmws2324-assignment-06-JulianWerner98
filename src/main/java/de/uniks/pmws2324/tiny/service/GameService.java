@@ -66,6 +66,9 @@ public class GameService {
         // generate orders
         generateOrder();
         generateOrder();
+
+        //Set init Car Price
+       this.headQuarter.setNewCarPrice(4242);
     }
 
     public void generateOrder() {
@@ -145,4 +148,13 @@ public class GameService {
     public void setNewCarPosition(Car car, Location location) {
         car.setPosition(location);
     }
+
+    public void buyCar(String driver) {
+        if(this.headQuarter.getMoney() >=  this.headQuarter.getNewCarPrice()) {
+            new Car().setOwner(headQuarter).setDriver(driver);
+            this.headQuarter.setMoney(this.headQuarter.getMoney() - this.headQuarter.getNewCarPrice());
+            this.headQuarter.setNewCarPrice(rnGenerator.nextInt(2000,7500));
+        }
+    }
+
 }

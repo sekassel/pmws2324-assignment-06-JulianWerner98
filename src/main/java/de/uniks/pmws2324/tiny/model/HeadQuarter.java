@@ -3,13 +3,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.Collection;
+import java.util.Objects;
 
 public class HeadQuarter
 extends City {
    public static final String PROPERTY_MONEY = "money";
    public static final String PROPERTY_OWNED_CARS = "ownedCars";
+   public static final String PROPERTY_NEW_CAR_PRICE = "newCarPrice";
    private int money;
    private List<Car> ownedCars;
+   private int newCarPrice;
 
    public int getMoney()
    {
@@ -92,6 +95,24 @@ extends City {
       {
          this.withoutOwnedCars(item);
       }
+      return this;
+   }
+
+   public int getNewCarPrice()
+   {
+      return this.newCarPrice;
+   }
+
+   public HeadQuarter setNewCarPrice(int value)
+   {
+      if (value == this.newCarPrice)
+      {
+         return this;
+      }
+
+      final int oldValue = this.newCarPrice;
+      this.newCarPrice = value;
+      this.firePropertyChange(PROPERTY_NEW_CAR_PRICE, oldValue, value);
       return this;
    }
 

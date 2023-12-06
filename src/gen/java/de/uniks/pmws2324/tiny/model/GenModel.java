@@ -19,6 +19,7 @@ public class GenModel implements ClassModelDecorator {
 
     class HeadQuarter extends City {
         int money;
+        int newCarPrice;
         @Link("owner")
         List<Car> ownedCars;
 

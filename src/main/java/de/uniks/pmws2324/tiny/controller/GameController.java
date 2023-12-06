@@ -15,6 +15,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -28,6 +29,7 @@ import static de.uniks.pmws2324.tiny.Constants.FIELD_DIM;
 public class GameController extends Controller {
     private static final int TRAVEL_TIME = 1;
     private final TimerService timerService;
+    private ShopController shopController;
     private HeadQuarter headQuarter;
     private Parent parent;
     private Order selectedOrder;
@@ -49,6 +51,12 @@ public class GameController extends Controller {
     Button orderAcceptButton;
     @FXML
     Canvas mapCanvas;
+    @FXML
+    StackPane rootPane;
+    @FXML
+    Button shopButton;
+    @FXML
+    Label carCostLabel;
 
     public GameController(App app, GameService gameService) {
         super(app, gameService);
@@ -76,6 +84,7 @@ public class GameController extends Controller {
         orderRewardLabel.setText("");
         orderTimeLabel.setText("");
         orderTownLabel.setText("");
+        carCostLabel.setText(headQuarter.getNewCarPrice() + "€");
 
         // Display the first car (will be changed later to display all cars)
         displayCar(null);
@@ -83,6 +92,8 @@ public class GameController extends Controller {
 
         // Set view listener
         orderAcceptButton.setOnAction(this::handleAcceptOrder);
+        shopController = new ShopController(gameService, rootPane);
+        shopButton.setOnAction(event -> shopController.load());
 
         // Register property change listener
         this.headQuarter.listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {
@@ -90,6 +101,9 @@ public class GameController extends Controller {
         });
         this.headQuarter.getOwnedCars().get(0).listeners().addPropertyChangeListener(Car.PROPERTY_POSITION, evt -> {
             drawMap();
+        });
+        this.headQuarter.listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_NEW_CAR_PRICE, evt -> {
+            this.carCostLabel.setText(this.headQuarter.getNewCarPrice() + "€");
         });
         for (City city : gameService.getCities()) {
             city.listeners().addPropertyChangeListener(City.PROPERTY_ORDERS, evt -> {
@@ -266,8 +280,6 @@ public class GameController extends Controller {
 
     @Override
     public void destroy() {
-        super.destroy();
-        this.headQuarter = null;
         this.headQuarter.listeners().removePropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {
             balanceLabel.textProperty().setValue(evt.getNewValue() + " €");
         });
@@ -284,5 +296,7 @@ public class GameController extends Controller {
             car.listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
         }
         this.gameService.getHeadquarter().getCars().get(0).listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
+        this.headQuarter = null;
+        super.destroy();
     }
 }

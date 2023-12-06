@@ -52,7 +52,7 @@
   roles: 	car_position 	car_order 	car_owner
 
 - headQuarter: 	org.fulib.classmodel.Clazz
-  attributes: 	headQuarter_money
+  attributes: 	headQuarter_money 	headQuarter_newCarPrice
   model: 	c
   modified: 	false
   name: 	HeadQuarter
@@ -242,6 +242,15 @@
   id: 	HeadQuarter_money
   modified: 	false
   name: 	money
+  propertyStyle: 	Bean
+  type: 	int
+  typeSignature: 	int
+
+- headQuarter_newCarPrice: 	org.fulib.classmodel.Attribute
+  clazz: 	headQuarter
+  id: 	HeadQuarter_newCarPrice
+  modified: 	false
+  name: 	newCarPrice
   propertyStyle: 	Bean
   type: 	int
   typeSignature: 	int
