@@ -204,9 +204,9 @@ public class GameController extends Controller {
         for (City city : this.gameService.getCities()) {
             if (city.getOrders().size() > 0) {
                 context.setFill(Color.BLUE);
-                context.fillOval(city.getX() + FIELD_DIM / 2, city.getY() + FIELD_DIM / 2, 10, 10);
+                context.fillOval(city.getX() + FIELD_DIM / 2, city.getY() + FIELD_DIM / 2, 15, 15);
                 context.setFill(Color.WHITE);
-                context.fillText(Integer.toString(city.getOrders().size()), city.getX() + FIELD_DIM / 2+10, city.getY() + FIELD_DIM / 2);
+                context.fillText(Integer.toString(city.getOrders().size()), city.getX() + FIELD_DIM / 2+4, city.getY()+12 + FIELD_DIM / 2);
             }
         }
     }
