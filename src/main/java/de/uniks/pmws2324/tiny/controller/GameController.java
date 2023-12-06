@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static de.uniks.pmws2324.tiny.Constants.FIELD_DIM;
 
@@ -38,10 +39,6 @@ public class GameController extends Controller {
     Label hqNameLabel;
     @FXML
     Label balanceLabel;
-    @FXML
-    Label carDriverLabel;
-    @FXML
-    Label carDestinationLabel;
     @FXML
     Label orderTownLabel;
     @FXML
@@ -125,7 +122,6 @@ public class GameController extends Controller {
     }
 
     private void displayCar(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("displayCar");
         this.carBox.getChildren().clear();
         for (Car car : this.gameService.getCars()) {
             CarSubController carSubController = new CarSubController();
@@ -209,6 +205,8 @@ public class GameController extends Controller {
             if (city.getOrders().size() > 0) {
                 context.setFill(Color.BLUE);
                 context.fillOval(city.getX() + FIELD_DIM / 2, city.getY() + FIELD_DIM / 2, 10, 10);
+                context.setFill(Color.WHITE);
+                context.fillText(Integer.toString(city.getOrders().size()), city.getX() + FIELD_DIM / 2+10, city.getY() + FIELD_DIM / 2);
             }
         }
     }
@@ -216,7 +214,7 @@ public class GameController extends Controller {
     private void setOrder(Order selectedOrder) {
         this.selectedOrder = selectedOrder;
         if (selectedOrder != null) {
-            this.orderAcceptButton.setDisable(this.gameService.getHeadquarter().getCars().size() == 0);
+            this.orderAcceptButton.setDisable(this.gameService.getHeadquarter().getCars().stream().filter(car -> car.getOrder() == null).findFirst().orElse(null) != null);
             this.orderRewardLabel.setText(selectedOrder.getReward() + " €");
             this.orderTimeLabel.setText(((int) (selectedOrder.getExpires() / 1000 / 60)) + ":" + ((int) ((selectedOrder.getExpires() / 1000) % 60)));
             this.orderTownLabel.setText(selectedOrder.getLocation().getName());
@@ -235,11 +233,14 @@ public class GameController extends Controller {
     }
 
     private void handleAcceptOrder(ActionEvent actionEvent) {
-        this.gameService.getHeadquarter().getCars().get(0).setOrder(selectedOrder);
+        Optional<Car> first = this.gameService.getHeadquarter().getCars().stream().filter(car -> car.getOrder() == null).findFirst();
+        first.get().setOrder(selectedOrder);
         startOrder(selectedOrder);
+        setOrder(null);
     }
 
     private void startOrder(Order selectedOrder) {
+        System.out.println("Start order with " + selectedOrder.getCar().getDriver());
         City end = selectedOrder.getLocation();
         ArrayList<Location> path = gameService.getPath(this.gameService.getHeadquarter(), end);
         if (path != null) {
@@ -256,7 +257,6 @@ public class GameController extends Controller {
             timeline.play();
         } else {
             this.gameService.getRewardForOrder(car.getOrder());
-            setOrder(null);
         }
     }
 

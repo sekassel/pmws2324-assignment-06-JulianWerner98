@@ -1,5 +1,6 @@
 package de.uniks.pmws2324.tiny.service;
 
+import de.uniks.pmws2324.tiny.model.City;
 import de.uniks.pmws2324.tiny.model.Street;
 
 import java.util.Random;
@@ -31,7 +32,22 @@ public class TimerService {
                 @Override
                 public void run() {
                     Street street = gameService.getStreets().get(rnGenerator.nextInt(gameService.getStreets().size()));
-                    street.setBlocked(!street.isBlocked());
+                    if(street.isBlocked()) {
+                        street.setBlocked(false);
+                    } else {
+                        Boolean otherWay = true;
+                        for (City city : gameService.getCities()) {
+                            street.setBlocked(true);
+                            if(gameService.getPath(city, gameService.getHeadQuarter()) == null) {
+                                street.setBlocked(false);
+                                otherWay = false;
+                                break;
+                            }
+                        }
+                        if (otherWay) {
+                            street.setBlocked(true);
+                        }
+                    }
                     changeRandomThings();
                 }
             }, rnGenerator.nextInt(1000, 10000));
