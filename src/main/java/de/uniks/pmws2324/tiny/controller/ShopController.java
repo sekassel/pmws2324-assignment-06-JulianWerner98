@@ -18,7 +18,7 @@ public class ShopController {
     @FXML
     Label shopBalanceLabel;
     @FXML
-    Label ShopCarCostLabel;
+    Label shopCarCostLabel;
     @FXML
     TextField nameInput;
     @FXML
@@ -47,7 +47,7 @@ public class ShopController {
 
         // Init the shop view
         this.shopBalanceLabel.setText(gameService.getHeadquarter().getMoney() + " €");
-        this.ShopCarCostLabel.setText(gameService.getHeadquarter().getNewCarPrice() + " €");
+        this.shopCarCostLabel.setText(gameService.getHeadquarter().getNewCarPrice() + " €");
         this.cancelButton.setOnMouseClicked(this::closeShop);
         this.buyButton.setOnMouseClicked(this::buyCar);
         this.buyButton.setDisable(true);

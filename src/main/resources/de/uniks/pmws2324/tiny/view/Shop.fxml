@@ -30,7 +30,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="ShopCarCostLabel" layoutX="310.0" layoutY="177.0" text="25.000€" textAlignment="CENTER">
+      <Label fx:id="shopCarCostLabel" layoutX="310.0" layoutY="177.0" text="25.000€" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
