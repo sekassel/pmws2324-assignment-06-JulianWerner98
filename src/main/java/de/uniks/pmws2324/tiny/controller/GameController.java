@@ -206,7 +206,7 @@ public class GameController extends Controller {
                 context.setFill(Color.BLUE);
                 context.fillOval(city.getX() + FIELD_DIM / 2, city.getY() + FIELD_DIM / 2, 15, 15);
                 context.setFill(Color.WHITE);
-                context.fillText(Integer.toString(city.getOrders().size()), city.getX() + FIELD_DIM / 2+4, city.getY()+12 + FIELD_DIM / 2);
+                context.fillText(Integer.toString(city.getOrders().size()), city.getX() + FIELD_DIM / 2 + 4, city.getY() + 12 + FIELD_DIM / 2);
             }
         }
     }
@@ -214,7 +214,7 @@ public class GameController extends Controller {
     private void setOrder(Order selectedOrder) {
         this.selectedOrder = selectedOrder;
         if (selectedOrder != null) {
-            this.orderAcceptButton.setDisable(this.gameService.getHeadquarter().getCars().stream().filter(car -> car.getOrder() == null).findFirst().orElse(null) != null);
+            this.orderAcceptButton.setDisable(this.gameService.getAvailableCar() != null);
             this.orderRewardLabel.setText(selectedOrder.getReward() + " €");
             this.orderTimeLabel.setText(((int) (selectedOrder.getExpires() / 1000 / 60)) + ":" + ((int) ((selectedOrder.getExpires() / 1000) % 60)));
             this.orderTownLabel.setText(selectedOrder.getLocation().getName());
@@ -233,14 +233,13 @@ public class GameController extends Controller {
     }
 
     private void handleAcceptOrder(ActionEvent actionEvent) {
-        Optional<Car> first = this.gameService.getHeadquarter().getCars().stream().filter(car -> car.getOrder() == null).findFirst();
-        first.get().setOrder(selectedOrder);
+        gameService.getAvailableCar().setOrder(selectedOrder);
         startOrder(selectedOrder);
         setOrder(null);
     }
 
     private void startOrder(Order selectedOrder) {
-        System.out.println("Start order with " + selectedOrder.getCar().getDriver());
+        System.out.println("Start order with " + selectedOrder.getCar().getDriver() + " to " + selectedOrder.getLocation().getName() + " for " + selectedOrder.getReward() + " €");
         City end = selectedOrder.getLocation();
         ArrayList<Location> path = gameService.getPath(this.gameService.getHeadquarter(), end);
         if (path != null) {
@@ -256,24 +255,40 @@ public class GameController extends Controller {
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(TRAVEL_TIME), event -> nextStep(locations, car)));
             timeline.play();
         } else {
+            System.out.println(car.getDriver() + " arrived at destination ");
+            if (car.getOrder() == null) {
+                System.out.println("Order is null");
+                return;
+            }
             this.gameService.getRewardForOrder(car.getOrder());
         }
     }
 
     private void handleMouseClick(double mouseX, double mouseY) {
         City selectedCity = gameService.getCities().stream()
-                .filter(city -> city.getX() < mouseX && city.getX() + FIELD_DIM > mouseX && city.getY() < mouseY && city.getY() + FIELD_DIM > mouseY).findFirst().orElse(null);
-        if (selectedCity != null && selectedCity.getOrders().size() > 0) {
-            setOrder(selectedCity.getOrders().get(0));
-            orderAcceptButton.setDisable(this.gameService.getHeadquarter().getCars().size() == 0);
-        } else {
-            setOrder(null);
-            orderAcceptButton.setDisable(true);
+                .filter(city -> city.getX() < mouseX
+                        && city.getX() + FIELD_DIM > mouseX
+                        && city.getY() < mouseY
+                        && city.getY() + FIELD_DIM > mouseY)
+                .findFirst().orElse(null);
+        if (selectedCity != null) {
+            Order possibleOrder = selectedCity.getOrders().stream()
+                    .filter(order -> order.getLocation() == selectedCity && order.getCar() == null)
+                    .findFirst().orElse(null);
+            if (possibleOrder != null) {
+                setOrder(possibleOrder);
+                orderAcceptButton.setDisable(this.gameService.getAvailableCar() == null);
+            } else {
+                setOrder(null);
+                orderAcceptButton.setDisable(true);
+            }
         }
     }
 
     @Override
     public void destroy() {
+        System.out.println("Destroying GameController");
+        timerService.stop();
         this.headQuarter.listeners().removePropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {
             balanceLabel.textProperty().setValue(evt.getNewValue() + " €");
         });
@@ -290,6 +305,9 @@ public class GameController extends Controller {
             car.listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
         }
         this.gameService.getHeadquarter().getCars().get(0).listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
+        this.headQuarter.listeners().removePropertyChangeListener(HeadQuarter.PROPERTY_NEW_CAR_PRICE, evt -> {
+            this.carCostLabel.setText(this.headQuarter.getNewCarPrice() + "€");
+        });
         this.headQuarter = null;
         super.destroy();
     }

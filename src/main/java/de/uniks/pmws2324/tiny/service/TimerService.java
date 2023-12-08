@@ -3,13 +3,13 @@ package de.uniks.pmws2324.tiny.service;
 import de.uniks.pmws2324.tiny.model.City;
 import de.uniks.pmws2324.tiny.model.Street;
 
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class TimerService {
     private final Random rnGenerator = new Random();
     private final GameService gameService;
+
+    private final List<Timer> timers = new ArrayList<>();
 
     public TimerService(GameService gameService) {
         this.gameService = gameService;
@@ -17,9 +17,10 @@ public class TimerService {
     }
 
     private void changeRandomThings() {
+        Timer timer = new Timer();
+        timers.add(timer);
         if(rnGenerator.nextBoolean()) {
-            // generate order
-            new Timer().schedule(new TimerTask() {
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     gameService.generateOrder();
@@ -28,7 +29,7 @@ public class TimerService {
             }, rnGenerator.nextInt(1000, 5000));
         } else {
             // block street
-            new Timer().schedule(new TimerTask() {
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Street street = gameService.getStreets().get(rnGenerator.nextInt(gameService.getStreets().size()));
@@ -52,6 +53,10 @@ public class TimerService {
                 }
             }, rnGenerator.nextInt(1000, 10000));
         }
+    }
+
+    public void stop() {
+        timers.forEach(Timer::cancel);
     }
 
 }

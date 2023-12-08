@@ -54,7 +54,6 @@ public class ShopController {
         this.nameInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 0
                             && newValue.length() < 20
-                            && newValue.matches("[a-zA-Z0-9]+")
                             && gameService.getHeadquarter().getMoney() >= gameService.getHeadquarter().getNewCarPrice()
             ) {
                 this.buyButton.setDisable(false);

@@ -173,4 +173,12 @@ public class GameService {
         return locations;
     }
 
+    public Car getAvailableCar() {
+        for (Car car : this.cars) {
+            if (car.getOrder() == null && car.getPosition() == this.headQuarter) {
+                return car;
+            }
+        }
+        return null;
+    }
 }
