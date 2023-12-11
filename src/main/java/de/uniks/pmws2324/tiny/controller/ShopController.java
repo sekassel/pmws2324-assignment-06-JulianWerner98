@@ -1,19 +1,22 @@
 package de.uniks.pmws2324.tiny.controller;
 
+import de.uniks.pmws2324.tiny.App;
 import de.uniks.pmws2324.tiny.Main;
 import de.uniks.pmws2324.tiny.service.GameService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
-public class ShopController {
+public class ShopController extends Controller {
 
-    private final StackPane rootPane;
+    //private final StackPane rootPane;
     private final GameService gameService;
     @FXML
     Label shopBalanceLabel;
@@ -25,26 +28,35 @@ public class ShopController {
     Button cancelButton;
     @FXML
     Button buyButton;
+    @FXML
+    StackPane rootPane;
+    private Pane shop;
+    private Node underground;
 
-    public ShopController(GameService gameService, StackPane rootPane) {
-        this.rootPane = rootPane;
+    public ShopController(App app, GameService gameService) {
+        super(app, gameService);
         this.gameService = gameService;
     }
 
-    public void load() {
-        // Load the shop view
+    @Override
+    public void init() {
         final FXMLLoader loader = new FXMLLoader(Main.class.getResource("view/Shop.fxml"));
         loader.setControllerFactory(c -> this);
         try {
-            Node underground = this.rootPane.getChildren().get(0);
+            shop = loader.load();
+            Parent root = app.getStage().getScene().getRoot();
+            rootPane = (StackPane) root;
+            underground = rootPane.getChildren().get(0);
             underground.setEffect(new javafx.scene.effect.BoxBlur(3, 3, 3));
             underground.setDisable(true);
-            Node shop = loader.load();
-            this.rootPane.getChildren().add(shop);
+            rootPane.getChildren().add(shop);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
+    @Override
+    public Parent render() {
         // Init the shop view
         this.shopBalanceLabel.setText(gameService.getHeadquarter().getMoney() + " €");
         this.shopCarCostLabel.setText(gameService.getHeadquarter().getNewCarPrice() + " €");
@@ -53,14 +65,15 @@ public class ShopController {
         this.buyButton.setDisable(true);
         this.nameInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 0
-                            && newValue.length() < 20
-                            && gameService.getHeadquarter().getMoney() >= gameService.getHeadquarter().getNewCarPrice()
+                    && newValue.length() < 20
+                    && gameService.getHeadquarter().getMoney() >= gameService.getHeadquarter().getNewCarPrice()
             ) {
                 this.buyButton.setDisable(false);
             } else {
                 this.buyButton.setDisable(true);
             }
         });
+        return null;
     }
 
     private void buyCar(MouseEvent mouseEvent) {
@@ -70,10 +83,9 @@ public class ShopController {
     }
 
     private void closeShop(MouseEvent mouseEvent) {
-        Node shop = this.rootPane.getChildren().get(1);
         this.rootPane.getChildren().remove(shop);
-        Node underground = this.rootPane.getChildren().get(0);
         underground.setEffect(null);
         underground.setDisable(false);
     }
+
 }

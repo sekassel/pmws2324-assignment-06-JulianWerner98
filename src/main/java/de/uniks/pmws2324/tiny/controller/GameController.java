@@ -88,8 +88,11 @@ public class GameController extends Controller {
 
         // Set view listener
         orderAcceptButton.setOnAction(this::handleAcceptOrder);
-        shopController = new ShopController(gameService, rootPane);
-        shopButton.setOnAction(event -> shopController.load());
+        shopController = new ShopController(app, gameService);
+        shopButton.setOnAction(event -> {
+            shopController.init();
+            shopController.render();
+        });
 
         // Register property change listener
         this.headQuarter.listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {

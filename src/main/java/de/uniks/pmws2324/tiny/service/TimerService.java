@@ -23,7 +23,9 @@ public class TimerService {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    gameService.generateOrder();
+                    if(gameService.getCities().stream().mapToInt(city -> city.getOrders().size()).sum() <= 5) {
+                        gameService.generateOrder();
+                    }
                     changeRandomThings();
                 }
             }, rnGenerator.nextInt(1000, 5000));

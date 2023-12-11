@@ -14,6 +14,10 @@ public class App extends Application {
     private Controller gameController;
     private GameService gameService;
 
+    public Stage getStage() {
+        return stage;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
