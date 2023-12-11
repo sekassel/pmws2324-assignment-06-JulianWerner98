@@ -1,7 +1,9 @@
 package de.uniks.pmws2324.tiny.controller;
 
+import de.uniks.pmws2324.tiny.App;
 import de.uniks.pmws2324.tiny.Main;
 import de.uniks.pmws2324.tiny.model.Car;
+import de.uniks.pmws2324.tiny.service.GameService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +14,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class CarSubController {
+public class CarSubController extends Controller {
     @FXML
     Label carDriverLabel;
     @FXML
@@ -21,8 +23,16 @@ public class CarSubController {
     private Car car;
     private Runnable onDestroy;
 
-    protected void load(Car car) {
+    public void setCar(Car car) {
         this.car = car;
+    }
+
+    public CarSubController(App app, GameService gameService) {
+        super(app, gameService);
+    }
+
+    @Override
+    public void init() {
         final FXMLLoader loader = new FXMLLoader(Main.class.getResource("view/CarComponent.fxml"));
         loader.setControllerFactory(c -> this);
         try {
@@ -30,14 +40,17 @@ public class CarSubController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    @Override
+    public Parent render() {
         this.carDriverLabel.setText(car.getDriver());
         if (car.getOrder() != null) {
             this.carDestinationLabel.setText(car.getOrder().getLocation().getName());
-        }
-        else {
+        } else {
             this.carDestinationLabel.setText("");
         }
+        return null;
     }
 
     public void showInto(VBox container) {
@@ -48,8 +61,7 @@ public class CarSubController {
 
     public void setOnDestroy(Runnable onDestroy) {
         this.onDestroy = onDestroy;
-        car.listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, evt -> {
-            this.carDestinationLabel.setText(car.getOrder().getLocation().getName());
-        });
     }
+
+
 }
