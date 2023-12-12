@@ -5,6 +5,7 @@ import de.uniks.pmws2324.tiny.model.*;
 import de.uniks.pmws2324.tiny.service.GameService;
 import de.uniks.pmws2324.tiny.Main;
 import de.uniks.pmws2324.tiny.service.TimerService;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static de.uniks.pmws2324.tiny.Constants.FIELD_DIM;
 
@@ -35,6 +37,14 @@ public class GameController extends Controller {
     private HeadQuarter headQuarter;
     private Parent parent;
     private Order selectedOrder;
+
+    private final AnimationTimer animation = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            gameService.checkOrdersValide();
+            drawMap();
+        }
+    };
     @FXML
     Label hqNameLabel;
     @FXML
@@ -88,7 +98,7 @@ public class GameController extends Controller {
 
         // Set view listener
         orderAcceptButton.setOnAction(this::handleAcceptOrder);
-        shopController = new ShopController(app, gameService,rootPane);
+        shopController = new ShopController(app, gameService, rootPane);
         shopButton.setOnAction(event -> {
             shopController.init();
             shopController.render();
@@ -98,29 +108,19 @@ public class GameController extends Controller {
         this.headQuarter.listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {
             balanceLabel.textProperty().setValue(evt.getNewValue() + " €");
         });
-        this.headQuarter.getOwnedCars().get(0).listeners().addPropertyChangeListener(Car.PROPERTY_POSITION, evt -> {
-            drawMap();
-        });
         this.headQuarter.listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_NEW_CAR_PRICE, evt -> {
             this.carCostLabel.setText(this.headQuarter.getNewCarPrice() + "€");
         });
-        for (City city : gameService.getCities()) {
-            city.listeners().addPropertyChangeListener(City.PROPERTY_ORDERS, evt -> {
-                drawMap();
-            });
-        }
 
         for (Car car : this.headQuarter.getCars()) {
-            car.listeners().addPropertyChangeListener(Car.PROPERTY_POSITION, evt -> drawMap());
             car.listeners().addPropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
         }
         this.gameService.getHeadquarter().listeners().addPropertyChangeListener(HeadQuarter.PROPERTY_CARS, this::displayCar);
         displayCar(null);
 
         mapCanvas.setOnMouseClicked(event -> handleMouseClick(event.getX(), event.getY()));
-        // draw on canvas
-        drawMap();
 
+        animation.start();
         return this.parent;
     }
 
@@ -155,10 +155,11 @@ public class GameController extends Controller {
             int length = (int) Math.sqrt(Math.pow(cityOne.getX() - cityTwo.getX(), 2) + Math.pow(cityOne.getY() - cityTwo.getY(), 2));
             context.setFill(Color.GREY);
             context.fillText(
-                    Integer.toString(length),
-                    ((cityOne.getX() + cityTwo.getX()) / 2) + (FIELD_DIM / 2 - 10),
+                    length + "km",
+                    ((cityOne.getX() + cityTwo.getX()) / 2),
                     (cityOne.getY() + cityTwo.getY()) / 2
             );
+
             if (street.isBlocked()) {
                 int x = (street.getConnects().get(0).getX() + FIELD_DIM / 2) + ((street.getConnects().get(1).getX() - street.getConnects().get(0).getX()) / 2);
                 int y = (street.getConnects().get(0).getY() + FIELD_DIM / 2) + ((street.getConnects().get(1).getY() - street.getConnects().get(0).getY()) / 2);
@@ -237,7 +238,11 @@ public class GameController extends Controller {
     }
 
     private void handleAcceptOrder(ActionEvent actionEvent) {
-        gameService.getAvailableCar().setOrder(selectedOrder);
+        if (selectedOrder.getLocation() == null) {
+            setOrder(null);
+            return;
+        }
+        gameService.startOrder(selectedOrder);
         startOrder(selectedOrder);
         setOrder(null);
     }
@@ -295,25 +300,7 @@ public class GameController extends Controller {
         gameService.saveGame();
         System.out.println("Game saved");
         timerService.stop();
-        this.headQuarter.listeners().removePropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {
-            balanceLabel.textProperty().setValue(evt.getNewValue() + " €");
-        });
-        this.headQuarter.getOwnedCars().get(0).listeners().removePropertyChangeListener(Car.PROPERTY_POSITION, evt -> {
-            drawMap();
-        });
-        for (City city : gameService.getCities()) {
-            city.listeners().removePropertyChangeListener(City.PROPERTY_ORDERS, evt -> {
-                drawMap();
-            });
-        }
-        for (Car car : this.headQuarter.getCars()) {
-            car.listeners().removePropertyChangeListener(Car.PROPERTY_POSITION, evt -> drawMap());
-            car.listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
-        }
-        this.gameService.getHeadquarter().getCars().get(0).listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
-        this.headQuarter.listeners().removePropertyChangeListener(HeadQuarter.PROPERTY_NEW_CAR_PRICE, evt -> {
-            this.carCostLabel.setText(this.headQuarter.getNewCarPrice() + "€");
-        });
+        //TODO: Remove PCL
         this.headQuarter = null;
         super.destroy();
     }

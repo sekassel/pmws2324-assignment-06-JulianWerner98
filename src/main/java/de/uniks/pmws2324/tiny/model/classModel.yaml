@@ -36,7 +36,7 @@
   superClass: 	location
 
 - order: 	org.fulib.classmodel.Clazz
-  attributes: 	order_expires 	order_reward
+  attributes: 	order_expires 	order_reward 	order_generatedTime
   model: 	c
   modified: 	false
   name: 	Order
@@ -44,7 +44,7 @@
   roles: 	order_location 	order_car
 
 - car: 	org.fulib.classmodel.Clazz
-  attributes: 	car_driver
+  attributes: 	car_driver 	car_startAtLastCity
   model: 	c
   modified: 	false
   name: 	Car
@@ -178,6 +178,15 @@
   type: 	int
   typeSignature: 	int
 
+- order_generatedTime: 	org.fulib.classmodel.Attribute
+  clazz: 	order
+  id: 	Order_generatedTime
+  modified: 	false
+  name: 	generatedTime
+  propertyStyle: 	Bean
+  type: 	Long
+  typeSignature: 	Long
+
 - order_location: 	org.fulib.classmodel.AssocRole
   aggregation: 	false
   cardinality: 	1
@@ -206,6 +215,15 @@
   propertyStyle: 	Bean
   type: 	String
   typeSignature: 	String
+
+- car_startAtLastCity: 	org.fulib.classmodel.Attribute
+  clazz: 	car
+  id: 	Car_startAtLastCity
+  modified: 	false
+  name: 	startAtLastCity
+  propertyStyle: 	Bean
+  type: 	Long
+  typeSignature: 	Long
 
 - car_position: 	org.fulib.classmodel.AssocRole
   aggregation: 	false

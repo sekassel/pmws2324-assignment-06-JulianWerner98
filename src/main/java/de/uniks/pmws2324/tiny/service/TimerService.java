@@ -26,6 +26,7 @@ public class TimerService {
                     if(gameService.getCities().stream().mapToInt(city -> city.getOrders().size()).sum() <= 5) {
                         gameService.generateOrder();
                     }
+                    timers.remove(timer);
                     changeRandomThings();
                 }
             }, rnGenerator.nextInt(1000, 5000));
@@ -51,6 +52,7 @@ public class TimerService {
                             street.setBlocked(true);
                         }
                     }
+                    timers.remove(timer);
                     changeRandomThings();
                 }
             }, rnGenerator.nextInt(1000, 10000));

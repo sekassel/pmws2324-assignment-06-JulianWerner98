@@ -9,6 +9,7 @@ import java.util.List;
 public class GenModel implements ClassModelDecorator {
     class Car {
         String driver;
+        Long startAtLastCity;
         @Link("ownedCars")
         HeadQuarter owner;
         @Link("cars")
@@ -22,12 +23,12 @@ public class GenModel implements ClassModelDecorator {
         int newCarPrice;
         @Link("owner")
         List<Car> ownedCars;
-
     }
 
     class Order {
         long expires;
         int reward;
+        Long generatedTime;
         @Link("order")
         Car car;
         @Link("orders")

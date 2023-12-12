@@ -1,5 +1,6 @@
 package de.uniks.pmws2324.tiny.model;
 import java.beans.PropertyChangeSupport;
+import java.util.Objects;
 
 public class Order
 {
@@ -7,11 +8,13 @@ public class Order
    public static final String PROPERTY_REWARD = "reward";
    public static final String PROPERTY_LOCATION = "location";
    public static final String PROPERTY_CAR = "car";
+   public static final String PROPERTY_GENERATED_TIME = "generatedTime";
    private long expires;
    private int reward;
    private City location;
    private Car car;
    protected PropertyChangeSupport listeners;
+   private Long generatedTime;
 
    public long getExpires()
    {
@@ -100,6 +103,24 @@ public class Order
          value.setOrder(this);
       }
       this.firePropertyChange(PROPERTY_CAR, oldValue, value);
+      return this;
+   }
+
+   public Long getGeneratedTime()
+   {
+      return this.generatedTime;
+   }
+
+   public Order setGeneratedTime(Long value)
+   {
+      if (Objects.equals(value, this.generatedTime))
+      {
+         return this;
+      }
+
+      final Long oldValue = this.generatedTime;
+      this.generatedTime = value;
+      this.firePropertyChange(PROPERTY_GENERATED_TIME, oldValue, value);
       return this;
    }
 
