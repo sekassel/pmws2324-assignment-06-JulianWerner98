@@ -14,6 +14,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import java.util.Stack;
+
 public class ShopController extends Controller {
 
     //private final StackPane rootPane;
@@ -33,9 +35,10 @@ public class ShopController extends Controller {
     private Pane shop;
     private Node underground;
 
-    public ShopController(App app, GameService gameService) {
+    public ShopController(App app, GameService gameService, StackPane rootPane) {
         super(app, gameService);
         this.gameService = gameService;
+        this.rootPane = rootPane;
     }
 
     @Override
@@ -44,8 +47,6 @@ public class ShopController extends Controller {
         loader.setControllerFactory(c -> this);
         try {
             shop = loader.load();
-            Parent root = app.getStage().getScene().getRoot();
-            rootPane = (StackPane) root;
             underground = rootPane.getChildren().get(0);
             underground.setEffect(new javafx.scene.effect.BoxBlur(3, 3, 3));
             underground.setDisable(true);

@@ -88,7 +88,7 @@ public class GameController extends Controller {
 
         // Set view listener
         orderAcceptButton.setOnAction(this::handleAcceptOrder);
-        shopController = new ShopController(app, gameService);
+        shopController = new ShopController(app, gameService,rootPane);
         shopButton.setOnAction(event -> {
             shopController.init();
             shopController.render();
