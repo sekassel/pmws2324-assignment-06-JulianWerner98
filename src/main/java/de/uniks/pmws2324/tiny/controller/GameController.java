@@ -127,9 +127,8 @@ public class GameController extends Controller {
     private void displayCar(PropertyChangeEvent propertyChangeEvent) {
         this.carBox.getChildren().clear();
         for (Car car : this.gameService.getCars()) {
-            CarSubController carSubController = new CarSubController(app, gameService);
+            CarSubController carSubController = new CarSubController(app, gameService, car);
             carSubController.init();
-            carSubController.setCar(car);
             carSubController.render();
             carSubController.showInto(carBox);
         }
