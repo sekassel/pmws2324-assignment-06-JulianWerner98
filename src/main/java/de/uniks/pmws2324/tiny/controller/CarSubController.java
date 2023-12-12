@@ -23,13 +23,6 @@ public class CarSubController extends Controller {
     private Car car;
     private Runnable onDestroy;
 
-    /**
-     * Do not use this constructor.
-     */
-    public CarSubController(App app, GameService gameService) {
-        super(app, gameService);
-    }
-
     public CarSubController(App app, GameService gameService, Car car) {
         super(app, gameService);
         this.car = car;
