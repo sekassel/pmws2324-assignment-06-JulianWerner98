@@ -10,6 +10,7 @@ public class GenModel implements ClassModelDecorator {
     class Car {
         String driver;
         Long startAtLastCity;
+        City lastCity;
         @Link("ownedCars")
         HeadQuarter owner;
         @Link("cars")

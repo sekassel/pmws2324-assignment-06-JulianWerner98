@@ -9,12 +9,14 @@ public class Car
    public static final String PROPERTY_ORDER = "order";
    public static final String PROPERTY_OWNER = "owner";
    public static final String PROPERTY_START_AT_LAST_CITY = "startAtLastCity";
+   public static final String PROPERTY_LAST_CITY = "lastCity";
    private String driver;
    private Location position;
    private Order order;
    protected PropertyChangeSupport listeners;
    private HeadQuarter owner;
    private Long startAtLastCity;
+   private City lastCity;
 
    public String getDriver()
    {
@@ -130,6 +132,24 @@ public class Car
       final Long oldValue = this.startAtLastCity;
       this.startAtLastCity = value;
       this.firePropertyChange(PROPERTY_START_AT_LAST_CITY, oldValue, value);
+      return this;
+   }
+
+   public City getLastCity()
+   {
+      return this.lastCity;
+   }
+
+   public Car setLastCity(City value)
+   {
+      if (Objects.equals(value, this.lastCity))
+      {
+         return this;
+      }
+
+      final City oldValue = this.lastCity;
+      this.lastCity = value;
+      this.firePropertyChange(PROPERTY_LAST_CITY, oldValue, value);
       return this;
    }
 

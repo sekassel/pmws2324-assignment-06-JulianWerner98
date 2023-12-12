@@ -107,7 +107,7 @@ public class GameService {
 
     public Street connectCities(City c1, City c2) {
         Street street = new Street().withConnects(c1).withConnects(c2);
-        street.setSpeedLimit(rnGenerator.nextInt(5, 15)*10);
+        street.setSpeedLimit(rnGenerator.nextInt(5, 15) * 10);
         streets.add(street);
         return street;
     }
@@ -173,8 +173,9 @@ public class GameService {
         order.setCar(null);
     }
 
-    public void setNewCarPosition(Car car, Location location) {
-        car.setPosition(location);
+    public void setNewCarPosition(Car car, Location location, City lastCity) {
+        car.setPosition(location).setLastCity(lastCity);
+        car.setStartAtLastCity(System.currentTimeMillis());
     }
 
     public void buyCar(String driver) {
@@ -202,6 +203,23 @@ public class GameService {
             }
         }
         return null;
+    }
+
+    public void checkOrdersValide() {
+        for (Order order : this.cities.stream().map(City::getOrders).flatMap(Collection::stream).toList()) {
+            if (order.getExpires() + order.getGeneratedTime() < System.currentTimeMillis()) {
+                order.getLocation().withoutOrders(order);
+                if (order.getCar() != null) {
+                    order.getCar().setPosition(this.headQuarter);
+                    order.setCar(null);
+                }
+            }
+        }
+    }
+
+    public void startOrder(Order selectedOrder) {
+        this.getAvailableCar().setOrder(selectedOrder);
+        selectedOrder.getCar().setStartAtLastCity(System.currentTimeMillis());
     }
 
     // ===============================================================================================================
@@ -234,22 +252,11 @@ public class GameService {
         }
     }
 
-    public void checkOrdersValide() {
-        for (Order order : this.cities.stream().map(City::getOrders).flatMap(Collection::stream).toList()) {
-            if (order.getExpires() + order.getGeneratedTime() < System.currentTimeMillis()) {
-                System.out.println("Order expired to " + order.getLocation().getName());
-                order.getLocation().withoutOrders(order);
-                if (order.getCar() != null) {
-                    order.getCar().setPosition(this.headQuarter);
-                    order.setCar(null);
-                }
-            }
-        }
-    }
-
-    public void startOrder(Order selectedOrder) {
-        this.getAvailableCar().setOrder(selectedOrder);
-        selectedOrder.getCar().setStartAtLastCity(System.currentTimeMillis());
+    public int getTimeForStreet(Street street) {
+        City c1 = street.getConnects().get(0);
+        City c2 = street.getConnects().get(1);
+        int distance = (int) Math.sqrt(Math.pow(c1.getX() - c2.getX(), 2) + Math.pow(c1.getY() - c2.getY(), 2));
+        return (int) (distance / (float) street.getSpeedLimit() * 1000);
     }
 }
 

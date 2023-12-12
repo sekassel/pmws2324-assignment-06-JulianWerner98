@@ -44,7 +44,7 @@
   roles: 	order_location 	order_car
 
 - car: 	org.fulib.classmodel.Clazz
-  attributes: 	car_driver 	car_startAtLastCity
+  attributes: 	car_driver 	car_startAtLastCity 	car_lastCity
   model: 	c
   modified: 	false
   name: 	Car
@@ -224,6 +224,15 @@
   propertyStyle: 	Bean
   type: 	Long
   typeSignature: 	Long
+
+- car_lastCity: 	org.fulib.classmodel.Attribute
+  clazz: 	car
+  id: 	Car_lastCity
+  modified: 	false
+  name: 	lastCity
+  propertyStyle: 	Bean
+  type: 	City
+  typeSignature: 	City
 
 - car_position: 	org.fulib.classmodel.AssocRole
   aggregation: 	false

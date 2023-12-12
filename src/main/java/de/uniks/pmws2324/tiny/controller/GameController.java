@@ -159,6 +159,12 @@ public class GameController extends Controller {
                     ((cityOne.getX() + cityTwo.getX()) / 2),
                     (cityOne.getY() + cityTwo.getY()) / 2
             );
+            context.setFill(Color.DARKBLUE);
+            context.fillText(
+                    street.getSpeedLimit() + "km/h",
+                    ((cityOne.getX() + cityTwo.getX()) / 2),
+                    (cityOne.getY() + cityTwo.getY()) / 2 + 12
+            );
 
             if (street.isBlocked()) {
                 int x = (street.getConnects().get(0).getX() + FIELD_DIM / 2) + ((street.getConnects().get(1).getX() - street.getConnects().get(0).getX()) / 2);
@@ -196,8 +202,14 @@ public class GameController extends Controller {
                 y = car.getPosition().getY() + 10;
                 if (location instanceof Street) {
                     Street street = (Street) location;
-                    x = (street.getConnects().get(0).getX() + FIELD_DIM / 2) + ((street.getConnects().get(1).getX() - street.getConnects().get(0).getX()) / 2);
-                    y = (street.getConnects().get(0).getY() + FIELD_DIM / 2) + ((street.getConnects().get(1).getY() - street.getConnects().get(0).getY()) / 2);
+                    int timeDiff = (int)(System.currentTimeMillis() - car.getStartAtLastCity());
+                    float elapsed = (timeDiff / (float)(gameService.getTimeForStreet(street)));
+                    City lastCity = car.getLastCity();
+                    City newCity = street.getConnects().get(0) == lastCity? street.getConnects().get(1) : street.getConnects().get(0);
+                    int xDistance = newCity.getX() - lastCity.getX();
+                    int yDistance = newCity.getY() - lastCity.getY();
+                    x = (lastCity.getX() + FIELD_DIM / 2) + (int)(xDistance * elapsed);
+                    y = (lastCity.getY() + FIELD_DIM / 2) + (int)(yDistance * elapsed);
                 }
                 context.setFill(Color.RED);
                 context.fillOval(x, y, FIELD_DIM / 4, FIELD_DIM / 4);
@@ -238,7 +250,7 @@ public class GameController extends Controller {
     }
 
     private void handleAcceptOrder(ActionEvent actionEvent) {
-        if (selectedOrder.getLocation() == null) {
+        if (selectedOrder == null || selectedOrder.getLocation() == null) {
             setOrder(null);
             return;
         }
@@ -257,12 +269,17 @@ public class GameController extends Controller {
     }
 
     private void nextStep(List<Location> locations, Car car) {
-        if (locations.size() > 0) {
-            Location nextLocation = locations.get(0);
-            gameService.setNewCarPosition(car, nextLocation);
+        if (locations.size() > 1) {
+            Location lastCity = locations.get(0);
             locations.remove(0);
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(TRAVEL_TIME), event -> nextStep(locations, car)));
-            timeline.play();
+            Location nextLocation = locations.get(0);
+            locations.remove(0);
+            gameService.setNewCarPosition(car, nextLocation, (City) lastCity);
+            int timeForStreet = gameService.getTimeForStreet((Street) nextLocation);
+            if(car.getOrder() != null) {
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(timeForStreet), event -> nextStep(locations, car)));
+                timeline.play();
+            }
         } else {
             System.out.println(car.getDriver() + " arrived at destination ");
             if (car.getOrder() == null) {
