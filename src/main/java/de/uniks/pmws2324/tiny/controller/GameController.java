@@ -321,6 +321,7 @@ public class GameController extends Controller {
         gameService.saveGame();
         System.out.println("Game saved");
         timerService.stop();
+        animation.stop();
         //TODO: Remove PCL
         this.headQuarter = null;
         super.destroy();
