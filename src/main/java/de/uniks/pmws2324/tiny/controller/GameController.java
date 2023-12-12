@@ -132,6 +132,10 @@ public class GameController extends Controller {
             carSubController.render();
             carSubController.showInto(carBox);
         }
+        if(gameService.getCars().size() >= 6) {
+            this.carCostLabel.setText("Max");
+            this.shopButton.setDisable(true);
+        }
     }
 
     private void drawMap() {
