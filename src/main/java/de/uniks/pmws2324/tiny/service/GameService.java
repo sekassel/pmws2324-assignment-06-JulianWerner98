@@ -140,7 +140,6 @@ public class GameService {
         order.getCar().setPosition(headQuarter);
         order.getLocation().withoutOrders(order);
         order.setCar(null);
-        generateOrder();
     }
 
     public void setNewCarPosition(Car car, Location location) {

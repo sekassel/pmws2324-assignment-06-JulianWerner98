@@ -256,23 +256,8 @@ public class GameController extends Controller {
 
     @Override
     public void destroy() {
-        super.destroy();
         this.headQuarter = null;
-        this.headQuarter.listeners().removePropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {
-            balanceLabel.textProperty().setValue(evt.getNewValue() + " €");
-        });
-        this.headQuarter.getOwnedCars().get(0).listeners().removePropertyChangeListener(Car.PROPERTY_POSITION, evt -> {
-            drawMap();
-        });
-        for (City city : gameService.getCities()) {
-            city.listeners().removePropertyChangeListener(City.PROPERTY_ORDERS, evt -> {
-                drawMap();
-            });
-        }
-        for (Car car : this.headQuarter.getCars()) {
-            car.listeners().removePropertyChangeListener(Car.PROPERTY_POSITION, evt -> drawMap());
-            car.listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
-        }
-        this.gameService.getHeadquarter().getCars().get(0).listeners().removePropertyChangeListener(Car.PROPERTY_ORDER, this::displayCar);
+        //Todo: Remove all listeners
+        super.destroy();
     }
 }
