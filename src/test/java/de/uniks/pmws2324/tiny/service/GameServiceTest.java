@@ -24,9 +24,9 @@ class GameServiceTest {
     void initGameTest() {
         GameService gameService = new GameService();
         gameService.initGame();
-        assertEquals(6, gameService.getCities().size());
+        assertEquals(5, gameService.getCities().size());
         assertEquals(7, gameService.getStreets().size());
-        City kassel = getCityByName(gameService.getCities(), "Kassel");
+        City kassel = gameService.getHeadquarter();
         City paderborn = getCityByName(gameService.getCities(), "Paderborn");
         City badArolsen = getCityByName(gameService.getCities(), "Bad Arolsen");
         City marburg = getCityByName(gameService.getCities(), "Marburg");

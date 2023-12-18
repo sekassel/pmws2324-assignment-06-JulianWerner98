@@ -85,10 +85,6 @@ public class GameService {
         return headQuarter;
     }
 
-    public HeadQuarter getHeadQuarter() {
-        return headQuarter;
-    }
-
     public ArrayList<Location> getPath(City start, City goal) {
         if (cities.isEmpty() || streets.isEmpty()) return null;
 
