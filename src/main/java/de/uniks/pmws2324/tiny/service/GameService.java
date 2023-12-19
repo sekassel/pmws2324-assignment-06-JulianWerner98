@@ -1,13 +1,10 @@
 package de.uniks.pmws2324.tiny.service;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.uniks.pmws2324.tiny.Constants;
 import de.uniks.pmws2324.tiny.model.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uniks.pmws2324.tiny.model.dto.SaveObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,10 +36,7 @@ public class GameService {
 
 
     public void initGame() {
-
-        // HQ Kassel
-        this.headQuarter = new HeadQuarter();
-        this.headQuarter.setName(Constants.CITY_NAME_KASSEL).setX(Constants.CITY_X_KASSEL).setY(Constants.CITY_Y_KASSEL);
+        this.headQuarter = loadHeadQuarter();
 
         // Paderborn
         City paderborn = new City();
@@ -78,16 +72,9 @@ public class GameService {
         connectCities(goettingen, paderborn);
         connectCities(marburg, eschwege);
 
-        SaveObject saveObject = loadSaveObject();
 
-        if (saveObject != null) {
-            this.headQuarter.setMoney(saveObject.getMoney());
-            this.headQuarter.setNewCarPrice(saveObject.getNewCarPrice());
-            for (String driver : saveObject.getCarDriver()) {
-                cars.add(new Car().setDriver(driver).setPosition(this.headQuarter).setOwner(this.headQuarter));
-            }
-        } else {
-            // generate Car
+        // generate Car
+        if(this.headQuarter.getOwnedCars().isEmpty()) {
             cars.add(new Car().setDriver("Alice").setPosition(this.headQuarter).setOwner(this.headQuarter));
             //Set init Car Price
             this.headQuarter.setNewCarPrice(4242);
@@ -227,14 +214,9 @@ public class GameService {
     // ===============================================================================================================
     public void saveGame() {
         try {
-            SaveObject saveObject = new SaveObject()
-                    .setMoney(this.headQuarter.getMoney())
-                    .setNewCarPrice(this.headQuarter.getNewCarPrice())
-                    .setCarDriver(cars.stream().map(Car::getDriver).toList());
-            objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            String gameJson = objectMapper.writeValueAsString(saveObject);
+            String hq = objectMapper.writeValueAsString(headQuarter);
             Files.createDirectories(Path.of(DATA_FOLDER));
-            Files.writeString(Path.of(GAME_DATA_JSON), gameJson);
+            Files.writeString(Path.of(GAME_DATA_JSON), hq);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -242,14 +224,24 @@ public class GameService {
         }
     }
 
-    private SaveObject loadSaveObject() {
-        if (Files.notExists(Path.of(GAME_DATA_JSON))) return null;
+    private HeadQuarter loadHeadQuarter() {
+        Path path = Path.of(GAME_DATA_JSON);
+        if (Files.notExists(path)) return initNewHeadquarter();
         try {
-            String json = Files.readString(Path.of(GAME_DATA_JSON));
-            return objectMapper.readValue(json.getBytes(), SaveObject.class);
+            String json = Files.readString(path);
+            HeadQuarter hq = objectMapper.readValue(json.getBytes(), HeadQuarter.class);
+            hq.getOwnedCars().forEach(car -> car.setOwner(hq).setPosition(hq));
+            cars.addAll(hq.getOwnedCars());
+            return hq;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private HeadQuarter initNewHeadquarter() {
+        HeadQuarter hq = new HeadQuarter();
+        hq.setName(Constants.CITY_NAME_KASSEL).setX(Constants.CITY_X_KASSEL).setY(Constants.CITY_Y_KASSEL);
+        return hq;
     }
 
     public int getTimeForStreet(Street street) {

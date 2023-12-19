@@ -1,25 +1,29 @@
 package de.uniks.pmws2324.tiny.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Collections;
 import java.util.Collection;
 
-public class City extends Location
-{
-   public static final String PROPERTY_NAME = "name";
-   public static final String PROPERTY_STREETS = "streets";
-   public static final String PROPERTY_ORDERS = "orders";
-   private String name;
-   private List<Street> streets;
-   private List<Order> orders;
+public class City extends Location {
+    public static final String PROPERTY_NAME = "name";
+    public static final String PROPERTY_STREETS = "streets";
+    public static final String PROPERTY_ORDERS = "orders";
+    private String name;
+    @JsonIgnore
+    private List<Street> streets;
+    @JsonIgnore
+    private List<Order> orders;
 
-   public String getName()
+    public String getName()
    {
       return this.name;
    }
 
-   public City setName(String value)
+    public City setName(String value)
    {
       if (Objects.equals(value, this.name))
       {
@@ -32,12 +36,12 @@ public class City extends Location
       return this;
    }
 
-   public List<Street> getStreets()
+    public List<Street> getStreets()
    {
       return this.streets != null ? Collections.unmodifiableList(this.streets) : Collections.emptyList();
    }
 
-   public City withStreets(Street value)
+    public City withStreets(Street value)
    {
       if (this.streets == null)
       {
@@ -52,7 +56,7 @@ public class City extends Location
       return this;
    }
 
-   public City withStreets(Street... value)
+    public City withStreets(Street... value)
    {
       for (final Street item : value)
       {
@@ -61,7 +65,7 @@ public class City extends Location
       return this;
    }
 
-   public City withStreets(Collection<? extends Street> value)
+    public City withStreets(Collection<? extends Street> value)
    {
       for (final Street item : value)
       {
@@ -70,7 +74,7 @@ public class City extends Location
       return this;
    }
 
-   public City withoutStreets(Street value)
+    public City withoutStreets(Street value)
    {
       if (this.streets != null && this.streets.remove(value))
       {
@@ -80,7 +84,7 @@ public class City extends Location
       return this;
    }
 
-   public City withoutStreets(Street... value)
+    public City withoutStreets(Street... value)
    {
       for (final Street item : value)
       {
@@ -89,7 +93,7 @@ public class City extends Location
       return this;
    }
 
-   public City withoutStreets(Collection<? extends Street> value)
+    public City withoutStreets(Collection<? extends Street> value)
    {
       for (final Street item : value)
       {
@@ -98,12 +102,12 @@ public class City extends Location
       return this;
    }
 
-   public List<Order> getOrders()
+    public List<Order> getOrders()
    {
       return this.orders != null ? Collections.unmodifiableList(this.orders) : Collections.emptyList();
    }
 
-   public City withOrders(Order value)
+    public City withOrders(Order value)
    {
       if (this.orders == null)
       {
@@ -118,7 +122,7 @@ public class City extends Location
       return this;
    }
 
-   public City withOrders(Order... value)
+    public City withOrders(Order... value)
    {
       for (final Order item : value)
       {
@@ -127,7 +131,7 @@ public class City extends Location
       return this;
    }
 
-   public City withOrders(Collection<? extends Order> value)
+    public City withOrders(Collection<? extends Order> value)
    {
       for (final Order item : value)
       {
@@ -136,7 +140,7 @@ public class City extends Location
       return this;
    }
 
-   public City withoutOrders(Order value)
+    public City withoutOrders(Order value)
    {
       if (this.orders != null && this.orders.remove(value))
       {
@@ -146,7 +150,7 @@ public class City extends Location
       return this;
    }
 
-   public City withoutOrders(Order... value)
+    public City withoutOrders(Order... value)
    {
       for (final Order item : value)
       {
@@ -155,7 +159,7 @@ public class City extends Location
       return this;
    }
 
-   public City withoutOrders(Collection<? extends Order> value)
+    public City withoutOrders(Collection<? extends Order> value)
    {
       for (final Order item : value)
       {
@@ -164,7 +168,7 @@ public class City extends Location
       return this;
    }
 
-   @Override
+    @Override
    public String toString()
    {
       final StringBuilder result = new StringBuilder(super.toString());
@@ -172,7 +176,7 @@ public class City extends Location
       return result.toString();
    }
 
-   @Override
+    @Override
    public void removeYou()
    {
       super.removeYou();

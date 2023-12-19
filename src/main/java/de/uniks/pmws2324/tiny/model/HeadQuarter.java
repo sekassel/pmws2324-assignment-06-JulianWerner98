@@ -1,4 +1,6 @@
 package de.uniks.pmws2324.tiny.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
@@ -11,6 +13,7 @@ extends City {
    public static final String PROPERTY_OWNED_CARS = "ownedCars";
    public static final String PROPERTY_NEW_CAR_PRICE = "newCarPrice";
    private int money;
+   @JsonManagedReference
    private List<Car> ownedCars;
    private int newCarPrice;
 

@@ -1,29 +1,36 @@
 package de.uniks.pmws2324.tiny.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 import java.beans.PropertyChangeSupport;
 
-public class Car
-{
-   public static final String PROPERTY_DRIVER = "driver";
-   public static final String PROPERTY_POSITION = "position";
-   public static final String PROPERTY_ORDER = "order";
-   public static final String PROPERTY_OWNER = "owner";
-   public static final String PROPERTY_START_AT_LAST_CITY = "startAtLastCity";
-   public static final String PROPERTY_LAST_CITY = "lastCity";
-   private String driver;
-   private Location position;
-   private Order order;
-   protected PropertyChangeSupport listeners;
-   private HeadQuarter owner;
-   private Long startAtLastCity;
-   private City lastCity;
+public class Car {
+    public static final String PROPERTY_DRIVER = "driver";
+    public static final String PROPERTY_POSITION = "position";
+    public static final String PROPERTY_ORDER = "order";
+    public static final String PROPERTY_OWNER = "owner";
+    public static final String PROPERTY_START_AT_LAST_CITY = "startAtLastCity";
+    public static final String PROPERTY_LAST_CITY = "lastCity";
+    private String driver;
+    @JsonIgnore
+    private Location position;
+    private Order order;
 
-   public String getDriver()
+    @JsonBackReference
+    private HeadQuarter owner;
+    protected PropertyChangeSupport listeners;
+    private Long startAtLastCity;
+    @JsonIgnore
+    private City lastCity;
+
+    public String getDriver()
    {
       return this.driver;
    }
 
-   public Car setDriver(String value)
+    public Car setDriver(String value)
    {
       if (Objects.equals(value, this.driver))
       {
@@ -36,12 +43,12 @@ public class Car
       return this;
    }
 
-   public Location getPosition()
+    public Location getPosition()
    {
       return this.position;
    }
 
-   public Car setPosition(Location value)
+    public Car setPosition(Location value)
    {
       if (this.position == value)
       {
@@ -63,12 +70,12 @@ public class Car
       return this;
    }
 
-   public Order getOrder()
+    public Order getOrder()
    {
       return this.order;
    }
 
-   public Car setOrder(Order value)
+    public Car setOrder(Order value)
    {
       if (this.order == value)
       {
@@ -90,12 +97,12 @@ public class Car
       return this;
    }
 
-   public HeadQuarter getOwner()
+    public HeadQuarter getOwner()
    {
       return this.owner;
    }
 
-   public Car setOwner(HeadQuarter value)
+    public Car setOwner(HeadQuarter value)
    {
       if (this.owner == value)
       {
@@ -117,12 +124,12 @@ public class Car
       return this;
    }
 
-   public Long getStartAtLastCity()
+    public Long getStartAtLastCity()
    {
       return this.startAtLastCity;
    }
 
-   public Car setStartAtLastCity(Long value)
+    public Car setStartAtLastCity(Long value)
    {
       if (Objects.equals(value, this.startAtLastCity))
       {
@@ -135,12 +142,12 @@ public class Car
       return this;
    }
 
-   public City getLastCity()
+    public City getLastCity()
    {
       return this.lastCity;
    }
 
-   public Car setLastCity(City value)
+    public Car setLastCity(City value)
    {
       if (Objects.equals(value, this.lastCity))
       {
@@ -153,7 +160,7 @@ public class Car
       return this;
    }
 
-   public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue)
+    public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue)
    {
       if (this.listeners != null)
       {
@@ -163,7 +170,7 @@ public class Car
       return false;
    }
 
-   public PropertyChangeSupport listeners()
+    public PropertyChangeSupport listeners()
    {
       if (this.listeners == null)
       {
@@ -172,7 +179,7 @@ public class Car
       return this.listeners;
    }
 
-   @Override
+    @Override
    public String toString()
    {
       final StringBuilder result = new StringBuilder();
@@ -180,7 +187,7 @@ public class Car
       return result.substring(1);
    }
 
-   public void removeYou()
+    public void removeYou()
    {
       this.setPosition(null);
       this.setOrder(null);

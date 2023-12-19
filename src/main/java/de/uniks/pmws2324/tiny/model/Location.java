@@ -1,4 +1,6 @@
 package de.uniks.pmws2324.tiny.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
@@ -12,6 +14,7 @@ public class Location
    public static final String PROPERTY_CARS = "cars";
    private int x;
    private int y;
+   @JsonIgnore
    private List<Car> cars;
    protected PropertyChangeSupport listeners;
 
