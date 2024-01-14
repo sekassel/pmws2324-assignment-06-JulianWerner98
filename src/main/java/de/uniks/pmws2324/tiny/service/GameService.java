@@ -78,20 +78,12 @@ public class GameService {
         connectCities(goettingen, paderborn);
         connectCities(marburg, eschwege);
 
-        SaveObject saveObject = loadSaveObject();
 
-        if (saveObject != null) {
-            this.headQuarter.setMoney(saveObject.getMoney());
-            this.headQuarter.setNewCarPrice(saveObject.getNewCarPrice());
-            for (String driver : saveObject.getCarDriver()) {
-                cars.add(new Car().setDriver(driver).setPosition(this.headQuarter).setOwner(this.headQuarter));
-            }
-        } else {
-            // generate Car
-            cars.add(new Car().setDriver("Alice").setPosition(this.headQuarter).setOwner(this.headQuarter));
-            //Set init Car Price
-            this.headQuarter.setNewCarPrice(4242);
-        }
+        // generate Car
+        cars.add(new Car().setDriver("Alice").setPosition(this.headQuarter).setOwner(this.headQuarter));
+        //Set init Car Price
+        this.headQuarter.setNewCarPrice(4242);
+
         // generate orders
         generateOrder();
         generateOrder();
@@ -111,10 +103,6 @@ public class GameService {
     }
 
     public HeadQuarter getHeadquarter() {
-        return headQuarter;
-    }
-
-    public HeadQuarter getHeadQuarter() {
         return headQuarter;
     }
 
@@ -200,36 +188,6 @@ public class GameService {
             }
         }
         return null;
-    }
-
-    // ===============================================================================================================
-    // Save & Load
-    // ===============================================================================================================
-    public void saveGame() {
-        try {
-            SaveObject saveObject = new SaveObject()
-                    .setMoney(this.headQuarter.getMoney())
-                    .setNewCarPrice(this.headQuarter.getNewCarPrice())
-                    .setCarDriver(cars.stream().map(Car::getDriver).toList());
-            objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            String gameJson = objectMapper.writeValueAsString(saveObject);
-            Files.createDirectories(Path.of(DATA_FOLDER));
-            Files.writeString(Path.of(GAME_DATA_JSON), gameJson);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private SaveObject loadSaveObject() {
-        if (Files.notExists(Path.of(GAME_DATA_JSON))) return null;
-        try {
-            String json = Files.readString(Path.of(GAME_DATA_JSON));
-            return objectMapper.readValue(json.getBytes(), SaveObject.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
 

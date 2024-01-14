@@ -61,7 +61,7 @@ public class GameController extends Controller {
     public GameController(App app, GameService gameService) {
         super(app, gameService);
         gameService.initGame();
-        this.headQuarter = gameService.getHeadQuarter();
+        this.headQuarter = gameService.getHeadquarter();
         timerService = new TimerService(gameService);
     }
 

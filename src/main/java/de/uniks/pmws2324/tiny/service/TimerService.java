@@ -41,7 +41,7 @@ public class TimerService {
                         Boolean otherWay = true;
                         for (City city : gameService.getCities()) {
                             street.setBlocked(true);
-                            if(gameService.getPath(city, gameService.getHeadQuarter()) == null) {
+                            if(gameService.getPath(city, gameService.getHeadquarter()) == null) {
                                 street.setBlocked(false);
                                 otherWay = false;
                                 break;
