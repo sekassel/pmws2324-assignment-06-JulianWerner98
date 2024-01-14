@@ -292,8 +292,6 @@ public class GameController extends Controller {
     @Override
     public void destroy() {
         System.out.println("Destroying GameController");
-        gameService.saveGame();
-        System.out.println("Game saved");
         timerService.stop();
         this.headQuarter.listeners().removePropertyChangeListener(HeadQuarter.PROPERTY_MONEY, evt -> {
             balanceLabel.textProperty().setValue(evt.getNewValue() + " €");
